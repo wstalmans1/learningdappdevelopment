@@ -1,4 +1,4 @@
-# DApp Development Learning Path: Zero to Hero
+# DApp Development Learning Path
 
 A progressive series of exercises designed to take you from zero knowledge to mastering DApp development using **production-ready setup guides** and modern web3 tooling.
 
@@ -28,7 +28,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 ### Learning Objectives
 - Understand the client-side DApp architecture: no backend server, blockchain = database, wallet = auth
 - Set up a modern development environment for DApp development
-- Understand the toolchain: Node.js, npm/yarn/pnpm, Git
+- Understand the toolchain: Node.js, pnpm, Git
 - Initialize a React project with Vite and TypeScript
 - Set up React Router DOM 6 with BrowserRouter
 - Configure ESLint, Prettier, and basic project structure
@@ -41,9 +41,9 @@ This learning path is structured in **9 progressive modules**, each building upo
 ### Exercises
 
 #### Exercise 1.1: Initial Environment Setup
-1. Install Node.js (v18+), npm/yarn/pnpm
+1. Install Node.js (v18+) and pnpm (8+)
 2. Install Git and configure it
-3. Install VS Code with recommended extensions (ESLint, Prettier, Solidity)
+3. Install VS Code or Cursor with recommended extensions (ESLint, Prettier, Solidity)
 4. Create a GitHub account and set up SSH keys
 
 #### Exercise 1.2: Project Initialization (Monorepo Structure)
@@ -635,7 +635,7 @@ After completing all modules, choose one of these projects to demonstrate master
 
 ### Tools
 - [Hardhat](https://hardhat.org/) - Development environment
-- [Foundry](https://book.getfoundry.sh/) - Smart contract toolkit
+- [Foundry](https://book.getfoundry.sh/) - Alternative smart contract toolkit (Solidity-native tests, faster execution -- not used in this curriculum but worth exploring later)
 - [Remix](https://remix.ethereum.org/) - Online IDE
 - [Tenderly](https://tenderly.co/) - Debugging and monitoring
 

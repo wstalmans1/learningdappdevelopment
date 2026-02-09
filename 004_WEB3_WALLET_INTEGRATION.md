@@ -77,7 +77,7 @@ Read about what each package does:
 - **Solution**: Ensure you're using the exact versions specified. Check `package.json` and reinstall if needed.
 
 **Issue:** TypeScript errors after installation
-- **Solution**: Restart VS Code and ensure TypeScript server is running. Run `pnpm type-check` to verify.
+- **Solution**: Restart your editor (VS Code / Cursor) and ensure TypeScript server is running. Run `pnpm type-check` to verify.
 
 ### Testing Your Solution
 

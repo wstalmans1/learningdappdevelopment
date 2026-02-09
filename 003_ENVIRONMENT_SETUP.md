@@ -24,41 +24,38 @@ Set up your development environment with all necessary tools for DApp developmen
 3. Verify installation:
    ```bash
    node --version
-   npm --version
    ```
-   You should see version numbers for both commands.
+   You should see v18.x.x or higher.
 
 **Expected Outcome:**
-- Node.js and npm are installed and accessible from terminal
+- Node.js is installed and accessible from terminal
 
 **Checkpoint:**
 - [ ] `node --version` shows v18.x.x or higher
-- [ ] `npm --version` shows 9.x.x or higher
 
-#### Step 2: Choose a Package Manager
-You have three options: npm (comes with Node.js), yarn, or pnpm. For this course, we'll use npm, but you can choose any:
+#### Step 2: Install pnpm
+This project uses **pnpm** exclusively. pnpm is faster than npm/yarn, uses less disk space (hard-linked packages), and has built-in workspace support for monorepos.
 
-**Option A: npm (Recommended for beginners)**
-- Already installed with Node.js
-- No additional installation needed
-
-**Option B: Install Yarn**
 ```bash
-npm install -g yarn
-yarn --version
+# Option A: via corepack (recommended, built into Node 16.10+)
+corepack enable
+corepack prepare pnpm@latest --activate
+
+# Option B: via npm (if corepack isn't available)
+npm install -g pnpm
 ```
 
-**Option C: Install pnpm**
+Verify installation:
 ```bash
-npm install -g pnpm
 pnpm --version
 ```
+You should see 8.x.x or higher.
 
 **Expected Outcome:**
-- A package manager is installed and ready to use
+- pnpm is installed and ready to use
 
 **Checkpoint:**
-- [ ] Can run `npm --version` (or yarn/pnpm equivalent)
+- [ ] `pnpm --version` shows 8.x.x or higher
 
 #### Step 3: Install Git
 1. **Mac**: Git may already be installed. Check with `git --version`
@@ -83,8 +80,9 @@ pnpm --version
 - [ ] `git --version` shows a version number
 - [ ] Git user name and email are configured
 
-#### Step 4: Set Up VS Code
-1. Download VS Code from [code.visualstudio.com](https://code.visualstudio.com/)
+#### Step 4: Set Up Your Editor (VS Code or Cursor)
+1. Download **VS Code** from [code.visualstudio.com](https://code.visualstudio.com/) or **Cursor** from [cursor.com](https://www.cursor.com/)
+   > Both editors share the same extension ecosystem and settings format. Cursor is a fork of VS Code with built-in AI capabilities. Everything in this curriculum works identically in either.
 2. Install recommended extensions:
    - **ESLint** (dbaeumer.vscode-eslint)
    - **Prettier** (esbenp.prettier-vscode)
@@ -92,15 +90,15 @@ pnpm --version
    - **TypeScript and JavaScript Language Features** (built-in)
    - **Tailwind CSS IntelliSense** (bradlc.vscode-tailwindcss)
 
-3. Open VS Code and install extensions:
+3. Open your editor and install extensions:
    - Press `Cmd+Shift+X` (Mac) or `Ctrl+Shift+X` (Windows/Linux)
    - Search for each extension and click "Install"
 
 **Expected Outcome:**
-- VS Code is installed with essential extensions
+- Editor is installed with essential extensions
 
 **Checkpoint:**
-- [ ] VS Code opens successfully
+- [ ] Editor opens successfully
 - [ ] All recommended extensions are installed
 
 #### Step 5: Create GitHub Account (if needed)
@@ -164,49 +162,50 @@ pnpm --version
   - Restart terminal after installation
   - On Windows, make sure Git Bash is in PATH
 
-**Issue:** VS Code extensions not installing
+**Issue:** Extensions not installing
 - **Solution:**
   - Check internet connection
-  - Try installing from VS Code marketplace website
-  - Restart VS Code
+  - Try installing from the VS Code marketplace website
+  - Restart your editor
 
 ### Testing Your Solution
 
 Run these commands to verify everything is set up:
 
 ```bash
-# Check Node.js
+# Check Node.js and pnpm
 node --version
-npm --version
+pnpm --version
 
 # Check Git
 git --version
 git config --global user.name
 git config --global user.email
 
-# Check VS Code (if installed via command line)
-code --version
+# Check editor (if installed via command line)
+code --version   # VS Code
+cursor --version # Cursor
 ```
 
 ### Extension (Optional)
 
 - Set up a GitHub CLI (`gh`) for easier GitHub interactions
-- Configure VS Code with custom settings (theme, font, etc.)
+- Configure your editor with custom settings (theme, font, etc.)
 - Set up a terminal profile with custom colors
 
 ### Resources
 
 - [Node.js Documentation](https://nodejs.org/docs/)
 - [Git Documentation](https://git-scm.com/doc)
-- [VS Code Documentation](https://code.visualstudio.com/docs)
+- [VS Code / Cursor Documentation](https://code.visualstudio.com/docs)
 - [GitHub SSH Setup Guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
 
 ### Submission Checklist
 
 - [ ] Node.js v18+ installed
-- [ ] Package manager (npm/yarn/pnpm) working
+- [ ] pnpm 8+ working
 - [ ] Git installed and configured
-- [ ] VS Code installed with recommended extensions
+- [ ] VS Code or Cursor installed with recommended extensions
 - [ ] GitHub account created
 - [ ] SSH keys set up (optional but recommended)
 
@@ -214,7 +213,7 @@ code --version
 
 ## Review Questions
 
-1. What is the difference between Node.js and npm?
+1. What is Node.js and why does it need a package manager (pnpm)?
 2. Why do we need Git for DApp development?
 3. What is the purpose of ESLint and Prettier extensions?
 4. Why is SSH authentication preferred over HTTPS for Git?
@@ -238,8 +237,8 @@ Create a new React project with Vite, TypeScript, and React Router DOM 6, then s
 ### Prerequisites
 - [x] Completed Exercise 1.1
 - [x] Node.js 18+ installed
-- [x] **pnpm 8+ installed** (required - not npm/yarn)
-- [x] VS Code installed
+- [x] pnpm 8+ installed
+- [x] VS Code or Cursor installed
 
 > **📖 Reference**: Follow the setup guides in `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for the complete setup process.
 
@@ -370,9 +369,10 @@ There is no `apps/api/`, no `apps/server/`, no serverless functions. The build o
    pnpm exec tailwindcss init -p
    ```
 
-4. Open the project in VS Code:
+4. Open the project in your editor:
    ```bash
-   code ../..  # Open monorepo root
+   code ../..    # VS Code — open monorepo root
+   cursor ../..  # Cursor — open monorepo root
    ```
 
 **Expected Outcome:**
@@ -597,7 +597,7 @@ There is no `apps/api/`, no `apps/server/`, no serverless functions. The build o
 
 **Checkpoint:**
 - [ ] Scripts are added to package.json
-- [ ] Can run `npm run type-check`
+- [ ] Can run `pnpm type-check`
 
 #### Step 10: Set Up .gitignore
 1. Check if `.gitignore` exists (it should from Vite)
@@ -619,6 +619,7 @@ There is no `apps/api/`, no `apps/server/`, no serverless functions. The build o
    # Production
    *.log
    npm-debug.log*
+   pnpm-debug.log*
 
    # Environment variables
    .env
@@ -716,7 +717,7 @@ There is no `apps/api/`, no `apps/server/`, no serverless functions. The build o
 
 **Issue:** `pnpm` command not found
 - **Solution:**
-  - Install pnpm: `npm install -g pnpm` or `corepack enable` (Node 16.10+)
+  - Install pnpm: `corepack enable` (Node 16.10+) or `npm install -g pnpm`
   - Verify: `pnpm --version` (should be 8.0.0+)
 
 **Issue:** `pnpm create vite` fails
@@ -734,7 +735,7 @@ There is no `apps/api/`, no `apps/server/`, no serverless functions. The build o
 **Issue:** TypeScript errors after project creation
 - **Solution:**
   - Run `pnpm install` from root to install all dependencies
-  - Restart VS Code
+  - Restart your editor
   - Check `apps/frontend/tsconfig.json` is properly configured
 
 **Issue:** Port 5173 already in use (Vite default)

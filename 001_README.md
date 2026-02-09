@@ -197,7 +197,7 @@ dapp_setup_guides/
 Before starting, make sure you have:
 
 - **Node.js 18+** installed
-- **pnpm 8+** installed (required - not npm/yarn)
+- **pnpm 8+** installed
 - Basic knowledge of JavaScript/TypeScript
 - Familiarity with command line
 - Understanding of Git basics
@@ -258,7 +258,7 @@ Each module includes:
 - **@openzeppelin/hardhat-upgrades** - Required for proxy deployments
 
 ### Development Tools
-- **VS Code** - Code editor
+- **VS Code / Cursor** - Code editor
 - **ESLint** - Linting (flat config format)
 - **Prettier** - Code formatting
 - **Husky + lint-staged** - Pre-commit hooks
@@ -270,8 +270,7 @@ Each module includes:
 
 ### Testing & Deployment
 - **Vitest** - Unit testing (frontend)
-- **Hardhat Tests** - Contract testing
-- **Foundry** (optional) - Fast contract tests
+- **Hardhat Tests** - Contract testing (Mocha + Chai + ethers.js)
 - **Static Hosting** - IPFS, Vercel, Netlify (SPA with `_redirects`)
 
 ### Required Patterns (Production-Ready)
@@ -304,4 +303,4 @@ Each module includes:
 
 **Happy Learning!**
 
-*Remember: The journey from zero to hero is a marathon, not a sprint. Take your time, practice regularly, and don't be afraid to make mistakes. That's how you learn!*
+*Remember: Learning DApp development is a marathon, not a sprint. Take your time, practice regularly, and don't be afraid to make mistakes. That's how you learn!*
