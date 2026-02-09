@@ -289,7 +289,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 #### Exercise 3.9: Contract Verification (Sourcify + Blockscout)
 1. Verify on Sourcify (no API key required)
 2. Verify on Blockscout (no API key required)
-3. No Etherscan API keys needed
+3. Understand why we use Sourcify/Blockscout instead of Etherscan (no sign-up or API keys needed)
 
 ### Key Concepts
 - **Solidity**: Types, functions, events, modifiers, inheritance

@@ -603,7 +603,7 @@ const amount: bigint = BigInt('1000000000000000000'); // 1 ETH in wei
 8. **Cache Invalidation**: Invalidate targeted scopes, not entire cache
 9. **Prevent Flicker**: Use `placeholderData` to keep previous data while refetching
 10. **State Separation**: Wagmi for blockchain state, TanStack Query for caching, Zustand for UI
-11. **Contract Verification**: Sourcify first, then Blockscout (no Etherscan API keys)
+11. **Contract Verification**: Sourcify first, then Blockscout (no API keys needed -- we skip Etherscan to avoid sign-up)
 12. **Build Versioning**: Use build counter system for debugging
 13. **Always check wallet connection** before contract interactions
 14. **Handle loading states** for all async operations

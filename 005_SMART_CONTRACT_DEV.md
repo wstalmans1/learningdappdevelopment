@@ -1085,6 +1085,8 @@ Learn to use OpenZeppelin's audited contract libraries and understand upgradeabl
 ### Objective
 Verify deployed contracts on Sourcify and Blockscout so their source code is publicly readable.
 
+> **Why not Etherscan?** Etherscan is the most well-known block explorer and supports contract verification, but it **requires a free API key** that you have to sign up for. This curriculum uses **Sourcify** and **Blockscout** instead -- both are free, open, and require no API keys or accounts. Your verified source code will still be publicly visible on Blockscout's explorer (and any other explorer that reads from Sourcify). You can always add Etherscan verification later if you want; it's just one more API key in your Hardhat config.
+
 ### Prerequisites
 - [x] Completed Exercise 3.8
 - [x] Contract deployed to Sepolia
@@ -1145,7 +1147,7 @@ Verify deployed contracts on Sourcify and Blockscout so their source code is pub
    pnpm exec hardhat verify --network sepolia <CONTRACT_ADDRESS>
    ```
 
-> **Important**: No Etherscan API keys needed. Sourcify and Blockscout verification is free and open.
+> **Note**: The `etherscan` config key above is just the name Hardhat's verify plugin uses internally -- it doesn't mean we're verifying on Etherscan. The `customChains` section redirects verification to Blockscout's API instead. The `"NO_API_KEY_NEEDED"` placeholder works because Blockscout doesn't require one.
 
 **Expected Outcome:**
 - Contract verified on Sourcify
