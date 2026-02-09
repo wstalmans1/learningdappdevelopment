@@ -2,7 +2,7 @@
 
 A comprehensive, progressive learning path for mastering DApp development.
 
-## 📚 Overview
+## Overview
 
 This repository contains a structured learning path designed to get an introduction to DApp development. The curriculum is based on **production-ready DApp setup guides** and modern web3 tooling including:
 
@@ -16,13 +16,14 @@ This repository contains a structured learning path designed to get an introduct
 - **TanStack Query 5.x** - Data fetching and caching
 - **Zustand 4.x** - Lightweight state management
 - **Hardhat 2.x** - Smart contract development
+- **Solidity 0.8.x** - Smart contract language
 - **OpenZeppelin Contracts 5.x** - Security-audited contract libraries
 
-> **📖 Important**: This learning path is based on the setup guides in `dapp_setup_guides/`. Always refer to those guides for the **single source of truth** on scaffolding, architecture, and best practices.
+> **Important**: This learning path is based on the setup guides in `dapp_setup_guides/`. Always refer to those guides for the **single source of truth** on scaffolding, architecture, and best practices.
 
-## 🗺️ Learning Path Structure
+## Learning Path Structure
 
-The learning path consists of **8 progressive modules**:
+The learning path consists of **9 progressive modules**:
 
 1. **Environment Setup & Project Scaffolding**
    - Development environment setup
@@ -34,101 +35,110 @@ The learning path consists of **8 progressive modules**:
    - RainbowKit integration
    - Wallet connection
 
-3. **Reading Blockchain Data**
+3. **Smart Contract Development & Deployment**
+   - Solidity fundamentals
+   - Hardhat setup, compilation, and testing
+   - Deploying to local and testnet
+   - OpenZeppelin contracts & upgradeable patterns
+   - ABI sharing with the frontend
+   - Contract verification (Sourcify + Blockscout)
+
+4. **Reading Blockchain Data**
    - Reading contract state
    - Using WAGMI hooks
    - Event listening
 
-4. **Writing to Blockchain (Transactions)**
+5. **Writing to Blockchain (Transactions)**
    - Transaction lifecycle
    - Writing to contracts
    - Gas estimation
    - Transaction feedback
 
-5. **Advanced Contract Interactions**
+6. **Advanced Contract Interactions**
    - ERC-20/ERC-721 interactions
-   - Multi-step transactions
-   - Contract factories
+   - Multi-step transactions (approval patterns)
+   - Real-time event system (WebSocket)
 
-6. **State Management & Data Fetching**
+7. **State Management & Data Fetching**
    - Global state management
    - Data caching
    - Optimistic updates
 
-7. **User Experience & Best Practices**
+8. **User Experience & Best Practices**
    - Error handling
    - Loading states
    - Responsive design
-   - Accessibility
+   - Connection health monitoring
 
-8. **Advanced Topics & Production Readiness**
-   - Security best practices
+9. **Advanced Topics & Production Readiness**
+   - Build versioning
    - Testing strategies
-   - CI/CD pipelines
-   - Monitoring
+   - Production builds & deployment
 
-## 📁 File Structure & Organization
+## File Structure & Organization
 
 This repository is organized with numbered files for easy navigation. Here's how the files are structured:
 
 ### Root Level Files (Learning Materials)
 
 ```
-Learning_exercises/
-├── 001_README.md                    # 📖 Start here! Main entry point and overview
-├── 002_DAPP_LEARNING_PATH.md        # 🗺️ Complete curriculum overview with all 8 modules
+learningdappdevelopment/
+├── 001_README.md                          # Start here! Main entry point and overview
+├── 002_DAPP_LEARNING_PATH.md              # Complete curriculum overview with all 9 modules
 │
-├── 003_MODULE_1_EXERCISES.md        # 📝 Detailed step-by-step exercises for Module 1
-├── 004_MODULE_2_EXERCISES.md        # 📝 Detailed step-by-step exercises for Module 2
-├── 005_MODULE_3_EXERCISES.md        # 📝 Detailed step-by-step exercises for Module 3
-├── 006_MODULE_4_EXERCISES.md        # 📝 Detailed step-by-step exercises for Module 4
-├── 007_MODULE_5_EXERCISES.md        # 📝 Detailed step-by-step exercises for Module 5
-├── 008_MODULE_6_EXERCISES.md        # 📝 Detailed step-by-step exercises for Module 6
-├── 009_MODULE_7_EXERCISES.md        # 📝 Detailed step-by-step exercises for Module 7
-├── 010_MODULE_8_EXERCISES.md        # 📝 Detailed step-by-step exercises for Module 8
+├── 003_MODULE_1_ENVIRONMENT_SETUP.md      # Module 1: Environment Setup & Project Scaffolding
+├── 004_MODULE_2_WEB3_WALLET_INTEGRATION.md # Module 2: Web3 Fundamentals & Wallet Integration
+├── 005_MODULE_3_SMART_CONTRACT_DEV.md     # Module 3: Smart Contract Development & Deployment
+├── 006_MODULE_4_READING_BLOCKCHAIN.md     # Module 4: Reading Blockchain Data
+├── 007_MODULE_5_WRITING_TRANSACTIONS.md   # Module 5: Writing to Blockchain (Transactions)
+├── 008_MODULE_6_ADVANCED_INTERACTIONS.md  # Module 6: Advanced Contract Interactions
+├── 009_MODULE_7_STATE_MANAGEMENT.md       # Module 7: State Management & Data Fetching
+├── 010_MODULE_8_UX_BEST_PRACTICES.md      # Module 8: User Experience & Best Practices
+├── 011_MODULE_9_PRODUCTION_READINESS.md   # Module 9: Advanced Topics & Production Readiness
 │
-└── 011_QUICK_REFERENCE.md            # 🔍 Quick lookup guide (use while working)
+└── 012_QUICK_REFERENCE.md                 # Quick lookup guide (use while working)
 ```
 
 ### Setup Guides (Single Source of Truth)
 
 ```
 dapp_setup_guides/
-├── 001_scaffolding_specs.md         # 🏗️ Tech stack, architecture, and patterns
-├── 002_setup_instructions_and_best_practices.md  # ⚙️ Complete setup guide
-└── bc_infrastructure_services.md    # 📊 RPC provider comparison (reference)
+├── 001_scaffolding_specs.md         # Tech stack, architecture, and patterns
+├── 002_setup_instructions_and_best_practices.md  # Complete setup guide
+└── bc_infrastructure_services.md    # RPC provider comparison (reference)
 ```
 
 ### Understanding the Numbering
 
 - **001-002**: Core learning materials (README and Learning Path overview)
-- **003-010**: Sequential module exercises (follow in order: Module 1 → Module 2 → ... → Module 8)
-- **011**: Quick Reference (use anytime as a lookup guide)
+- **003-011**: Sequential module exercises (follow in order: Module 1 → Module 2 → ... → Module 9)
+- **012**: Quick Reference (use anytime as a lookup guide)
 - **dapp_setup_guides/**: Authoritative setup guides (referenced throughout exercises)
 
 ### How to Use These Files
 
 1. **Start with `001_README.md`** - Read the overview and prerequisites
 2. **Read `002_DAPP_LEARNING_PATH.md`** - Understand the full curriculum
-3. **Follow exercises sequentially** - Start with `003_MODULE_1_EXERCISES.md`, then `004_MODULE_2_EXERCISES.md`, etc.
-4. **Keep `011_QUICK_REFERENCE.md` open** - Use it as a cheat sheet while working
+3. **Follow exercises sequentially** - Start with `003_MODULE_1_ENVIRONMENT_SETUP.md`, then `004_MODULE_2_WEB3_WALLET_INTEGRATION.md`, etc.
+4. **Keep `012_QUICK_REFERENCE.md` open** - Use it as a cheat sheet while working
 5. **Refer to setup guides** - When exercises mention setup guides, check `dapp_setup_guides/` folder
 
-> **💡 Tip**: The numbered files (001-011) are your learning materials. The `dapp_setup_guides/` folder contains the authoritative technical specifications that all exercises are based on.
+> **Tip**: The numbered files (001-012) are your learning materials. The `dapp_setup_guides/` folder contains the authoritative technical specifications that all exercises are based on.
 
-## 📖 Documentation
+## Documentation
 
 ### Learning Path
 - **[002_DAPP_LEARNING_PATH.md](./002_DAPP_LEARNING_PATH.md)** - Complete learning path with all modules, exercises, and concepts
-- **[003_MODULE_1_EXERCISES.md](./003_MODULE_1_EXERCISES.md)** - Detailed exercises for Module 1: Environment Setup & Project Scaffolding
-- **[004_MODULE_2_EXERCISES.md](./004_MODULE_2_EXERCISES.md)** - Detailed exercises for Module 2: Web3 Fundamentals & Wallet Integration
-- **[005_MODULE_3_EXERCISES.md](./005_MODULE_3_EXERCISES.md)** - Detailed exercises for Module 3: Reading Blockchain Data
-- **[006_MODULE_4_EXERCISES.md](./006_MODULE_4_EXERCISES.md)** - Detailed exercises for Module 4: Writing to Blockchain (Transactions)
-- **[007_MODULE_5_EXERCISES.md](./007_MODULE_5_EXERCISES.md)** - Detailed exercises for Module 5: Advanced Contract Interactions
-- **[008_MODULE_6_EXERCISES.md](./008_MODULE_6_EXERCISES.md)** - Detailed exercises for Module 6: State Management & Data Fetching
-- **[009_MODULE_7_EXERCISES.md](./009_MODULE_7_EXERCISES.md)** - Detailed exercises for Module 7: User Experience & Best Practices
-- **[010_MODULE_8_EXERCISES.md](./010_MODULE_8_EXERCISES.md)** - Detailed exercises for Module 8: Advanced Topics & Production Readiness
-- **[011_QUICK_REFERENCE.md](./011_QUICK_REFERENCE.md)** - Quick reference guide for common tasks
+- **[003_MODULE_1_ENVIRONMENT_SETUP.md](./003_MODULE_1_ENVIRONMENT_SETUP.md)** - Module 1: Environment Setup & Project Scaffolding
+- **[004_MODULE_2_WEB3_WALLET_INTEGRATION.md](./004_MODULE_2_WEB3_WALLET_INTEGRATION.md)** - Module 2: Web3 Fundamentals & Wallet Integration
+- **[005_MODULE_3_SMART_CONTRACT_DEV.md](./005_MODULE_3_SMART_CONTRACT_DEV.md)** - Module 3: Smart Contract Development & Deployment
+- **[006_MODULE_4_READING_BLOCKCHAIN.md](./006_MODULE_4_READING_BLOCKCHAIN.md)** - Module 4: Reading Blockchain Data
+- **[007_MODULE_5_WRITING_TRANSACTIONS.md](./007_MODULE_5_WRITING_TRANSACTIONS.md)** - Module 5: Writing to Blockchain (Transactions)
+- **[008_MODULE_6_ADVANCED_INTERACTIONS.md](./008_MODULE_6_ADVANCED_INTERACTIONS.md)** - Module 6: Advanced Contract Interactions
+- **[009_MODULE_7_STATE_MANAGEMENT.md](./009_MODULE_7_STATE_MANAGEMENT.md)** - Module 7: State Management & Data Fetching
+- **[010_MODULE_8_UX_BEST_PRACTICES.md](./010_MODULE_8_UX_BEST_PRACTICES.md)** - Module 8: User Experience & Best Practices
+- **[011_MODULE_9_PRODUCTION_READINESS.md](./011_MODULE_9_PRODUCTION_READINESS.md)** - Module 9: Advanced Topics & Production Readiness
+- **[012_QUICK_REFERENCE.md](./012_QUICK_REFERENCE.md)** - Quick reference guide for common tasks
 
 ### Setup Guides (Single Source of Truth)
 - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -137,17 +147,17 @@ dapp_setup_guides/
 ### Reference Documentation
 - **[bc_infrastructure_services.md](./dapp_setup_guides/bc_infrastructure_services.md)** - Blockchain infrastructure services comparison and information (RPC providers, WebSocket support, pricing, use cases)
 
-> **⚠️ Critical**: The setup guides (001 and 002) are the **single source of truth** for scaffolding and setup. The infrastructure services document provides comparison information to help understand provider options.
+> **Critical**: The setup guides (001 and 002) are the **single source of truth** for scaffolding and setup. The infrastructure services document provides comparison information to help understand provider options.
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Start with Module 1**: Read `002_DAPP_LEARNING_PATH.md` to understand the full curriculum
-2. **Complete Module 1 Exercises**: Follow `003_MODULE_1_EXERCISES.md` step by step
+2. **Complete Module 1 Exercises**: Follow `003_MODULE_1_ENVIRONMENT_SETUP.md` step by step
 3. **Progress Sequentially**: Complete each module before moving to the next
 4. **Ask Questions**: Don't hesitate to ask for help when stuck
 5. **Practice**: Build small projects between modules to reinforce learning
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before starting, make sure you have:
 
@@ -162,20 +172,22 @@ Before starting, make sure you have:
 
 > **Note**: This learning path uses a **monorepo structure** with pnpm workspaces. Familiarity with monorepos is helpful but not required.
 
-## 🎯 Learning Objectives
+## Learning Objectives
 
 By the end of this learning path, you will be able to:
 
-- ✅ Set up a complete DApp development environment
-- ✅ Integrate wallet connections using RainbowKit
-- ✅ Read data from smart contracts
-- ✅ Send transactions to smart contracts
-- ✅ Handle complex contract interactions
-- ✅ Manage application state effectively
-- ✅ Create production-ready DApps with excellent UX
-- ✅ Deploy and monitor DApps in production
+- Set up a complete DApp development environment
+- Write, test, and deploy Solidity smart contracts
+- Use OpenZeppelin libraries and upgradeable patterns
+- Integrate wallet connections using RainbowKit
+- Read data from smart contracts
+- Send transactions to smart contracts
+- Handle complex contract interactions
+- Manage application state effectively
+- Create production-ready DApps with excellent UX
+- Deploy and monitor DApps in production
 
-## 📝 Self-Assessment
+## Self-Assessment
 
 Each module includes:
 
@@ -184,7 +196,7 @@ Each module includes:
 - **Hands-on Exercises** - Practical implementation
 - **Submission Checklist** - Ensure completeness
 
-## 🔧 Tools & Technologies
+## Tools & Technologies
 
 ### Core Stack (Monorepo Structure)
 - **Package Manager**: **pnpm** (required - workspace support)
@@ -233,7 +245,7 @@ Each module includes:
 - **Scopes Pattern** - TanStack Query cache invalidation
 - **Build Versioning** - Build counter system
 
-## 📚 Resources
+## Resources
 
 ### Documentation
 - [RainbowKit Docs](https://rainbowkit.com/)
@@ -243,6 +255,9 @@ Each module includes:
 - [React Router Docs](https://reactrouter.com/)
 - [Vite Docs](https://vitejs.dev/)
 - [Ethereum.org](https://ethereum.org/en/developers/)
+- [Solidity Docs](https://docs.soliditylang.org/)
+- [OpenZeppelin Docs](https://docs.openzeppelin.com/contracts/)
+- [Hardhat Docs](https://hardhat.org/docs)
 
 ### Communities
 - [Ethereum Stack Exchange](https://ethereum.stackexchange.com/)
@@ -251,6 +266,6 @@ Each module includes:
 
 ---
 
-**Happy Learning! 🚀**
+**Happy Learning!**
 
 *Remember: The journey from zero to hero is a marathon, not a sprint. Take your time, practice regularly, and don't be afraid to make mistakes. That's how you learn!*

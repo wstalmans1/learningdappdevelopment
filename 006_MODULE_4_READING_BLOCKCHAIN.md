@@ -1,4 +1,4 @@
-# Module 3: Reading Blockchain Data
+# Module 4: Reading Blockchain Data
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -6,13 +6,13 @@
 >
 > The setup guides are the **single source of truth** for scaffolding and architecture decisions.
 
-## Exercise 3.1: Set Up Scopes Pattern for Cache Management
+## Exercise 4.1: Set Up Scopes Pattern for Cache Management
 
 ### Objective
 Create a centralized scopes system for TanStack Query cache invalidation to prevent UI flicker and enable targeted cache updates.
 
 ### Prerequisites
-- [x] Completed Module 2
+- [x] Completed Module 3 (contract deployed and ABI shared with frontend)
 - [x] TanStack Query configured
 - [x] Wagmi set up
 
@@ -85,79 +85,39 @@ Create a centralized scopes system for TanStack Query cache invalidation to prev
 
 ---
 
-## Exercise 3.2: Read Simple Contract State
+## Exercise 4.2: Read Simple Contract State
 
 ### Objective
-Read data from a smart contract using Wagmi hooks with proper scopes and error handling.
+Read data from the SimpleStorage contract you deployed in Module 3 using Wagmi hooks with proper scopes and error handling.
 
 ### Prerequisites
-- [x] Completed Exercise 3.1
-- [x] Have a deployed contract address (or use a public contract)
-- [x] Contract ABI available
+- [x] Completed Exercise 4.1
+- [x] SimpleStorage deployed (from Module 3) and address available
+- [x] Contract ABI shared with frontend (from Module 3, Exercise 3.7)
 
 ### Instructions
 
-#### Step 1: Prepare Contract Information
-1. For this exercise, you can use any public contract on Sepolia, or deploy a simple one:
-   ```solidity
-   // SimpleStorage.sol
-   pragma solidity ^0.8.22;
-   
-   contract SimpleStorage {
-       uint256 public storedValue;
-       string public storedString;
-       
-       function setValue(uint256 _value) public {
-           storedValue = _value;
-       }
-       
-       function setString(string memory _str) public {
-           storedString = _str;
-       }
-   }
+#### Step 1: Import Contract Info
+1. Import from the contracts file you created in Module 3:
+   ```typescript
+   import { SIMPLE_STORAGE_ADDRESS, SIMPLE_STORAGE_ABI } from '@/contracts/SimpleStorage';
    ```
 
-2. Get the contract address and ABI
-
-#### Step 2: Create Contract ABI File
-1. Create `apps/frontend/src/abis/SimpleStorage.json`:
-   ```json
-   [
-     {
-       "inputs": [],
-       "name": "storedValue",
-       "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-       "stateMutability": "view",
-       "type": "function"
-     },
-     {
-       "inputs": [],
-       "name": "storedString",
-       "outputs": [{"internalType": "string", "name": "", "type": "string"}],
-       "stateMutability": "view",
-       "type": "function"
-     }
-   ]
-   ```
-
-#### Step 3: Create Read Component
+#### Step 2: Create Read Component
 1. Create `apps/frontend/src/components/ReadContract.tsx`:
    ```typescript
    import { useReadContract } from 'wagmi';
    import { useChainId } from 'wagmi';
    import { scopes } from '@/lib/scopes';
-   import SimpleStorageABI from '@/abis/SimpleStorage.json';
+   import { SIMPLE_STORAGE_ADDRESS, SIMPLE_STORAGE_ABI } from '@/contracts/SimpleStorage';
 
-   interface ReadContractProps {
-     contractAddress: `0x${string}`;
-   }
-
-   export function ReadContract({ contractAddress }: ReadContractProps) {
+   export function ReadContract() {
      const chainId = useChainId();
+     const contractAddress = SIMPLE_STORAGE_ADDRESS;
      
      const { data: storedValue, isLoading: valueLoading, isError: valueError } = useReadContract({
        address: contractAddress,
-       abi: SimpleStorageABI,
+       abi: SIMPLE_STORAGE_ABI,
        functionName: 'storedValue',
        query: {
          scopeKey: scopes.storedValue(chainId, contractAddress),
@@ -167,7 +127,7 @@ Read data from a smart contract using Wagmi hooks with proper scopes and error h
 
      const { data: storedString, isLoading: stringLoading, isError: stringError } = useReadContract({
        address: contractAddress,
-       abi: SimpleStorageABI,
+       abi: SIMPLE_STORAGE_ABI,
        functionName: 'storedString',
        query: {
          scopeKey: scopes.storedString(chainId, contractAddress),
@@ -194,7 +154,7 @@ Read data from a smart contract using Wagmi hooks with proper scopes and error h
    ```
 
 **Expected Outcome:**
-- Component reads contract state
+- Component reads contract state from the contract deployed in Module 3
 - Uses scope keys for cache management
 - Handles loading and error states
 
@@ -221,8 +181,8 @@ Read data from a smart contract using Wagmi hooks with proper scopes and error h
 
 ### Submission Checklist
 
-- [ ] Contract ABI file created
 - [ ] Read component created
+- [ ] Uses contract info from Module 3
 - [ ] Uses scope keys
 - [ ] Handles loading states
 - [ ] Handles error states
@@ -230,13 +190,13 @@ Read data from a smart contract using Wagmi hooks with proper scopes and error h
 
 ---
 
-## Exercise 3.3: Read Multiple Contract Values
+## Exercise 4.3: Read Multiple Contract Values
 
 ### Objective
 Read multiple contract values simultaneously using `useReadContracts` for batch reading.
 
 ### Prerequisites
-- [x] Completed Exercise 3.2
+- [x] Completed Exercise 4.2
 - [x] Understanding of single value reading
 
 ### Instructions
@@ -246,25 +206,22 @@ Read multiple contract values simultaneously using `useReadContracts` for batch 
    ```typescript
    import { useReadContracts } from 'wagmi';
    import { useChainId } from 'wagmi';
-   import SimpleStorageABI from '@/abis/SimpleStorage.json';
+   import { SIMPLE_STORAGE_ADDRESS, SIMPLE_STORAGE_ABI } from '@/contracts/SimpleStorage';
 
-   interface ReadMultipleProps {
-     contractAddress: `0x${string}`;
-   }
-
-   export function ReadMultiple({ contractAddress }: ReadMultipleProps) {
+   export function ReadMultiple() {
      const chainId = useChainId();
+     const contractAddress = SIMPLE_STORAGE_ADDRESS;
      
      const { data, isLoading, isError } = useReadContracts({
        contracts: [
          {
            address: contractAddress,
-           abi: SimpleStorageABI,
+           abi: SIMPLE_STORAGE_ABI,
            functionName: 'storedValue',
          },
          {
            address: contractAddress,
-           abi: SimpleStorageABI,
+           abi: SIMPLE_STORAGE_ABI,
            functionName: 'storedString',
          },
        ],
@@ -322,59 +279,24 @@ Read multiple contract values simultaneously using `useReadContracts` for batch 
 
 ---
 
-## Exercise 3.4: Read ERC-20 Token Data
+## Exercise 4.4: Read ERC-20 Token Data
 
 ### Objective
 Read ERC-20 token information (name, symbol, decimals, balance) using standard ERC-20 ABI.
 
 ### Prerequisites
-- [x] Completed Exercise 3.3
+- [x] Completed Exercise 4.3
 - [x] Understanding of ERC-20 standard
 
 ### Instructions
 
-#### Step 1: Create ERC-20 ABI
-1. Create `apps/frontend/src/abis/ERC20.json`:
-   ```json
-   [
-     {
-       "inputs": [],
-       "name": "name",
-       "outputs": [{"internalType": "string", "name": "", "type": "string"}],
-       "stateMutability": "view",
-       "type": "function"
-     },
-     {
-       "inputs": [],
-       "name": "symbol",
-       "outputs": [{"internalType": "string", "name": "", "type": "string"}],
-       "stateMutability": "view",
-       "type": "function"
-     },
-     {
-       "inputs": [],
-       "name": "decimals",
-       "outputs": [{"internalType": "uint8", "name": "", "type": "uint8"}],
-       "stateMutability": "view",
-       "type": "function"
-     },
-     {
-       "inputs": [{"internalType": "address", "name": "account", "type": "address"}],
-       "name": "balanceOf",
-       "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-       "stateMutability": "view",
-       "type": "function"
-     }
-   ]
-   ```
-
-#### Step 2: Create Token Info Component
+#### Step 1: Create Token Info Component
 1. Create `apps/frontend/src/components/TokenInfo.tsx`:
    ```typescript
    import { useReadContract, useReadContracts } from 'wagmi';
    import { useAccount, useChainId } from 'wagmi';
    import { formatUnits } from 'viem';
-   import ERC20ABI from '@/abis/ERC20.json';
+   import { erc20Abi } from 'viem';
    import { scopes } from '@/lib/scopes';
 
    interface TokenInfoProps {
@@ -388,9 +310,9 @@ Read ERC-20 token information (name, symbol, decimals, balance) using standard E
      // Read token info (name, symbol, decimals)
      const { data: tokenInfo, isLoading: infoLoading } = useReadContracts({
        contracts: [
-         { address: tokenAddress, abi: ERC20ABI, functionName: 'name' },
-         { address: tokenAddress, abi: ERC20ABI, functionName: 'symbol' },
-         { address: tokenAddress, abi: ERC20ABI, functionName: 'decimals' },
+         { address: tokenAddress, abi: erc20Abi, functionName: 'name' },
+         { address: tokenAddress, abi: erc20Abi, functionName: 'symbol' },
+         { address: tokenAddress, abi: erc20Abi, functionName: 'decimals' },
        ],
        query: {
          scopeKey: scopes.tokenInfo(chainId, tokenAddress),
@@ -401,7 +323,7 @@ Read ERC-20 token information (name, symbol, decimals, balance) using standard E
      // Read user balance
      const { data: balance, isLoading: balanceLoading } = useReadContract({
        address: tokenAddress,
-       abi: ERC20ABI,
+       abi: erc20Abi,
        functionName: 'balanceOf',
        args: [address!],
        query: {
@@ -457,7 +379,6 @@ Read ERC-20 token information (name, symbol, decimals, balance) using standard E
 - Formats balance using decimals
 
 **Checkpoint:**
-- [ ] ERC-20 ABI created
 - [ ] Component reads token info
 - [ ] Component reads user balance
 - [ ] Balance formatted correctly with decimals
@@ -473,7 +394,6 @@ Read ERC-20 token information (name, symbol, decimals, balance) using standard E
 
 ### Submission Checklist
 
-- [ ] ERC-20 ABI created
 - [ ] Token info component created
 - [ ] Reads name, symbol, decimals
 - [ ] Reads user balance
@@ -482,62 +402,37 @@ Read ERC-20 token information (name, symbol, decimals, balance) using standard E
 
 ---
 
-## Exercise 3.5: Listen to Contract Events (Basic)
+## Exercise 4.5: Listen to Contract Events (Basic)
 
 ### Objective
 Listen to contract events and update UI in real-time using `useWatchContractEvent`.
 
 ### Prerequisites
-- [x] Completed Exercise 3.4
+- [x] Completed Exercise 4.4
 - [x] Understanding of contract events
 
 ### Instructions
 
-#### Step 1: Add Event to ABI
-1. Update `apps/frontend/src/abis/SimpleStorage.json` to include event:
-   ```json
-   [
-     {
-       "inputs": [],
-       "name": "storedValue",
-       "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-       "stateMutability": "view",
-       "type": "function"
-     },
-     {
-       "anonymous": false,
-       "inputs": [
-         {"indexed": false, "internalType": "uint256", "name": "newValue", "type": "uint256"}
-       ],
-       "name": "ValueSet",
-       "type": "event"
-     }
-   ]
-   ```
-
-#### Step 2: Create Event Listener Component
+#### Step 1: Create Event Listener Component
 1. Create `apps/frontend/src/components/EventListener.tsx`:
    ```typescript
    import { useWatchContractEvent, useReadContract } from 'wagmi';
    import { useQueryClient } from '@tanstack/react-query';
    import { useChainId } from 'wagmi';
    import { scopes } from '@/lib/scopes';
-   import SimpleStorageABI from '@/abis/SimpleStorage.json';
+   import { SIMPLE_STORAGE_ADDRESS, SIMPLE_STORAGE_ABI } from '@/contracts/SimpleStorage';
    import { useState } from 'react';
 
-   interface EventListenerProps {
-     contractAddress: `0x${string}`;
-   }
-
-   export function EventListener({ contractAddress }: EventListenerProps) {
+   export function EventListener() {
      const qc = useQueryClient();
      const chainId = useChainId();
+     const contractAddress = SIMPLE_STORAGE_ADDRESS;
      const [events, setEvents] = useState<Array<{ value: string; timestamp: Date }>>([]);
      
      // Read current value
      const { data: currentValue } = useReadContract({
        address: contractAddress,
-       abi: SimpleStorageABI,
+       abi: SIMPLE_STORAGE_ABI,
        functionName: 'storedValue',
        query: {
          scopeKey: scopes.storedValue(chainId, contractAddress),
@@ -547,7 +442,7 @@ Listen to contract events and update UI in real-time using `useWatchContractEven
      // Watch for ValueSet events
      useWatchContractEvent({
        address: contractAddress,
-       abi: SimpleStorageABI,
+       abi: SIMPLE_STORAGE_ABI,
        eventName: 'ValueSet',
        onLogs: (logs) => {
          // Invalidate query to refresh data
@@ -616,7 +511,6 @@ Listen to contract events and update UI in real-time using `useWatchContractEven
 
 ### Submission Checklist
 
-- [ ] Event added to ABI
 - [ ] Event listener component created
 - [ ] Invalidates queries on events
 - [ ] Displays event log
@@ -642,4 +536,4 @@ After completing this module, you should:
 - Be able to read ERC-20 token data
 - Understand how to listen to contract events
 - Handle loading and error states properly
-- Proceed to Module 4: Writing to Blockchain (Transactions)
+- Proceed to Module 5: Writing to Blockchain (Transactions)

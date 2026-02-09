@@ -1,4 +1,4 @@
-# Module 8: Advanced Topics & Production Readiness
+# Module 9: Advanced Topics & Production Readiness
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -6,95 +6,13 @@
 >
 > The setup guides are the **single source of truth** for scaffolding and architecture decisions.
 
-## Exercise 8.1: Contract Verification (Sourcify + Blockscout)
-
-### Objective
-Verify smart contracts on Sourcify first, then Blockscout, without using Etherscan API keys.
-
-### Prerequisites
-- [x] Completed Module 7
-- [x] Contract deployed to Sepolia
-- [x] Hardhat configured
-
-### Instructions
-
-#### Step 1: Verify on Sourcify
-1. Install Sourcify plugin (optional, can use API directly):
-   ```bash
-   cd packages/contracts
-   pnpm add -D @sourcify-dev/hardhat-sourcify
-   ```
-
-2. Update `hardhat.config.cjs`:
-   ```javascript
-   require("@sourcify-dev/hardhat-sourcify");
-
-   module.exports = {
-     // ... existing config
-     sourcify: {
-       enabled: true,
-       apiUrl: "https://sourcify.dev/server",
-       browserUrl: "https://sourcify.dev",
-     },
-   };
-   ```
-
-3. Verify contract:
-   ```bash
-   pnpm exec hardhat sourcify --network sepolia
-   ```
-
-#### Step 2: Verify on Blockscout
-1. Update `hardhat.config.cjs`:
-   ```javascript
-   module.exports = {
-     // ... existing config
-     networks: {
-       sepolia: {
-         url: process.env.SEPOLIA_URL,
-         accounts: [process.env.PRIVATE_KEY],
-         verify: {
-           apiUrl: 'https://eth-sepolia.blockscout.com/api',
-           apiKey: 'NO_API_KEY_NEEDED', // Blockscout doesn't require API key
-           browserUrl: 'https://eth-sepolia.blockscout.com',
-         },
-       },
-     },
-   };
-   ```
-
-2. Verify contract:
-   ```bash
-   pnpm exec hardhat verify --network sepolia <CONTRACT_ADDRESS>
-   ```
-
-**Expected Outcome:**
-- Contract verified on Sourcify
-- Contract verified on Blockscout
-- No API keys required
-
-**Checkpoint:**
-- [ ] Sourcify verification successful
-- [ ] Blockscout verification successful
-- [ ] Contract source visible on explorers
-
-> **📖 Reference**: See `dapp_setup_guides/001_scaffolding_specs.md` section 7 for verification details.
-
-### Submission Checklist
-
-- [ ] Contract verified on Sourcify
-- [ ] Contract verified on Blockscout
-- [ ] No API keys used
-
----
-
-## Exercise 8.2: Build Versioning
+## Exercise 9.1: Build Versioning
 
 ### Objective
 Implement build versioning system for debugging and support.
 
 ### Prerequisites
-- [x] Completed Exercise 8.1
+- [x] Completed Module 8
 - [x] Vite configured
 
 ### Instructions
@@ -121,13 +39,13 @@ Implement build versioning system for debugging and support.
          return 1;
        }
      } catch (error) {
-       console.warn('⚠️ Could not read/write build counter, using timestamp fallback');
+       console.warn('Could not read/write build counter, using timestamp fallback');
        return Math.floor(Date.now() / 1000);
      }
    }
 
    const buildNumber = getBuildNumber();
-   console.log(`🚀 Build #${buildNumber}`);
+   console.log(`Build #${buildNumber}`);
 
    export default defineConfig({
      plugins: [react()],
@@ -176,90 +94,13 @@ Implement build versioning system for debugging and support.
 
 ---
 
-## Exercise 8.3: Security Best Practices
-
-### Objective
-Implement security best practices for DApp development.
-
-### Prerequisites
-- [x] Completed Exercise 8.2
-- [x] Understanding of common vulnerabilities
-
-### Instructions
-
-#### Step 1: Input Validation
-1. Create `apps/frontend/src/utils/validation.ts`:
-   ```typescript
-   import { isAddress } from 'viem';
-
-   export function validateAddress(address: string): boolean {
-     return isAddress(address);
-   }
-
-   export function validateAmount(amount: string, maxDecimals: number = 18): boolean {
-     const regex = new RegExp(`^\\d+(\\.\\d{1,${maxDecimals}})?$`);
-     return regex.test(amount) && parseFloat(amount) > 0;
-   }
-
-   export function sanitizeInput(input: string): string {
-     return input.trim().slice(0, 1000); // Limit length
-   }
-   ```
-
-#### Step 2: Rate Limiting (Frontend)
-1. Create `apps/frontend/src/utils/rateLimit.ts`:
-   ```typescript
-   const requestTimestamps: number[] = [];
-   const MAX_REQUESTS = 10;
-   const WINDOW_MS = 60 * 1000; // 1 minute
-
-   export function checkRateLimit(): boolean {
-     const now = Date.now();
-     const recentRequests = requestTimestamps.filter(
-       (timestamp) => now - timestamp < WINDOW_MS
-     );
-
-     if (recentRequests.length >= MAX_REQUESTS) {
-       return false; // Rate limit exceeded
-     }
-
-     requestTimestamps.push(now);
-     return true;
-   }
-   ```
-
-#### Step 3: Secure Environment Variables
-1. Ensure `.env.local` is in `.gitignore`
-2. Never commit private keys or API keys
-3. Use environment variables for all secrets
-
-**Expected Outcome:**
-- Input validation implemented
-- Rate limiting implemented
-- Environment variables secured
-
-**Checkpoint:**
-- [ ] Input validation utilities created
-- [ ] Rate limiting implemented
-- [ ] Environment variables secured
-- [ ] No secrets in code
-
-### Submission Checklist
-
-- [ ] Input validation implemented
-- [ ] Rate limiting implemented
-- [ ] Environment variables secured
-- [ ] No secrets committed
-
----
-
-## Exercise 8.4: Testing Strategy
+## Exercise 9.2: Testing Strategy
 
 ### Objective
 Set up testing for both frontend and smart contracts.
 
 ### Prerequisites
-- [x] Completed Exercise 8.3
+- [x] Completed Exercise 9.1
 - [x] Understanding of testing concepts
 
 ### Instructions
@@ -306,53 +147,42 @@ Set up testing for both frontend and smart contracts.
    });
    ```
 
-#### Step 3: Write Contract Tests
-1. Create `packages/contracts/test/MyToken.test.js`:
-   ```javascript
-   const { expect } = require("chai");
-   const { ethers, upgrades } = require("hardhat");
-
-   describe("MyToken", function () {
-     it("Should deploy and initialize", async function () {
-       const MyToken = await ethers.getContractFactory("MyToken");
-       const myToken = await upgrades.deployProxy(MyToken, [], {
-         initializer: "initialize",
-       });
-       await myToken.waitForDeployment();
-
-       expect(await myToken.name()).to.equal("MyToken");
-       expect(await myToken.symbol()).to.equal("MTK");
-     });
-   });
+#### Step 3: Verify Contract Tests
+1. Ensure contract tests from Module 3 still pass:
+   ```bash
+   cd packages/contracts
+   pnpm test
    ```
+
+2. Add more advanced contract tests as needed (e.g., for upgradeable contracts, edge cases)
 
 **Expected Outcome:**
 - Testing framework set up
 - Frontend tests written
-- Contract tests written
+- Contract tests verified
 
 **Checkpoint:**
 - [ ] Vitest configured
 - [ ] Frontend tests written
-- [ ] Contract tests written
+- [ ] Contract tests passing
 - [ ] Tests pass
 
 ### Submission Checklist
 
 - [ ] Testing framework set up
 - [ ] Frontend tests written
-- [ ] Contract tests written
+- [ ] Contract tests verified
 - [ ] Tests run successfully
 
 ---
 
-## Exercise 8.5: Production Build and Deployment
+## Exercise 9.3: Production Build and Deployment
 
 ### Objective
 Build the DApp for production and prepare for static hosting deployment.
 
 ### Prerequisites
-- [x] Completed Exercise 8.4
+- [x] Completed Exercise 9.2
 - [x] All features implemented
 
 ### Instructions
@@ -426,33 +256,31 @@ Build the DApp for production and prepare for static hosting deployment.
 
 ## Review Questions
 
-1. Why verify contracts on Sourcify first, then Blockscout?
-2. What is the purpose of build versioning?
-3. What security practices should you follow in DApp development?
-4. Why are manual chunks important in production builds?
-5. What should be tested before deploying to production?
+1. What is the purpose of build versioning?
+2. Why are manual chunks important in production builds?
+3. What should be tested before deploying to production?
+4. Why is the `_redirects` file needed for static hosting?
 
 ---
 
 ## Next Steps
 
 After completing this module, you should:
-- Understand contract verification process
 - Know how to implement build versioning
-- Follow security best practices
 - Set up testing strategies
 - Build and deploy to production
 - Have a complete, production-ready DApp!
 
 ---
 
-## 🎉 Congratulations!
+## Congratulations!
 
 You've completed the full DApp development learning path! You now have the skills to:
 - Set up a complete DApp development environment
+- Write, test, and deploy smart contracts
 - Build production-ready DApps
 - Handle complex blockchain interactions
 - Create excellent user experiences
 - Deploy and maintain DApps
 
-Continue building and learning! 🚀
+Continue building and learning!

@@ -992,4 +992,4 @@ After completing this module, you should:
 - Understand provider configuration and transport selection
 - Understand the relationship between Wagmi and Viem
 - Know when to use Viem utilities vs Wagmi hooks
-- Proceed to Module 3: Reading Blockchain Data
+- Proceed to Module 3: Smart Contract Development & Deployment

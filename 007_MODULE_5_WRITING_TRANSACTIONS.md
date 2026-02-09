@@ -1,4 +1,4 @@
-# Module 4: Writing to Blockchain (Transactions)
+# Module 5: Writing to Blockchain (Transactions)
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -6,13 +6,13 @@
 >
 > The setup guides are the **single source of truth** for scaffolding and architecture decisions.
 
-## Exercise 4.1: Create Transaction Overlay System (REQUIRED)
+## Exercise 5.1: Create Transaction Overlay System (REQUIRED)
 
 ### Objective
 Implement a transaction overlay system for production-grade UX that provides clear feedback during blockchain transactions.
 
 ### Prerequisites
-- [x] Completed Module 3
+- [x] Completed Module 4
 - [x] Understanding of transaction lifecycle
 - [x] Zustand installed
 
@@ -252,13 +252,13 @@ Implement a transaction overlay system for production-grade UX that provides cle
 
 ---
 
-## Exercise 4.2: Write to Contract (Simple)
+## Exercise 5.2: Write to Contract (Simple)
 
 ### Objective
 Send a transaction to a smart contract using Wagmi hooks with proper transaction overlay integration.
 
 ### Prerequisites
-- [x] Completed Exercise 4.1
+- [x] Completed Exercise 5.1
 - [x] Transaction overlay system set up
 - [x] Contract deployed and address available
 
@@ -401,13 +401,13 @@ Send a transaction to a smart contract using Wagmi hooks with proper transaction
 
 ---
 
-## Exercise 4.3: Gas Estimation
+## Exercise 5.3: Gas Estimation
 
 ### Objective
 Estimate gas costs before sending transactions and display them to users.
 
 ### Prerequisites
-- [x] Completed Exercise 4.2
+- [x] Completed Exercise 5.2
 - [x] Understanding of gas and transaction costs
 
 ### Instructions
@@ -477,13 +477,13 @@ Estimate gas costs before sending transactions and display them to users.
 
 ---
 
-## Exercise 4.4: Complex Transaction with Validation
+## Exercise 5.4: Complex Transaction with Validation
 
 ### Objective
 Create a transaction with multiple parameters and proper input validation.
 
 ### Prerequisites
-- [x] Completed Exercise 4.3
+- [x] Completed Exercise 5.3
 - [x] Understanding of form validation
 
 ### Instructions
@@ -636,4 +636,4 @@ After completing this module, you should:
 - Know how to estimate gas costs
 - Handle transaction errors gracefully
 - Invalidate cache after transactions
-- Proceed to Module 5: Advanced Contract Interactions
+- Proceed to Module 6: Advanced Contract Interactions

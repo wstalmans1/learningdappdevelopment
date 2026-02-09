@@ -2,7 +2,7 @@
 
 A progressive series of exercises designed to take you from zero knowledge to mastering DApp development using **production-ready setup guides** and modern web3 tooling.
 
-> **📖 Critical**: This learning path is based on the setup guides in `dapp_setup_guides/`. Always refer to those guides for the **single source of truth** on scaffolding, architecture, and best practices.
+> **Critical**: This learning path is based on the setup guides in `dapp_setup_guides/`. Always refer to those guides for the **single source of truth** on scaffolding, architecture, and best practices.
 >
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
 > - **[002_setup_instructions_and_best_practices.md](./dapp_setup_guides/002_setup_instructions_and_best_practices.md)** - Complete setup instructions
@@ -10,7 +10,7 @@ A progressive series of exercises designed to take you from zero knowledge to ma
 
 ## Overview
 
-This learning path is structured in **8 progressive modules**, each building upon the previous one. Each module contains:
+This learning path is structured in **9 progressive modules**, each building upon the previous one. Each module contains:
 - **Learning objectives**
 - **Prerequisites**
 - **Hands-on exercises**
@@ -19,7 +19,7 @@ This learning path is structured in **8 progressive modules**, each building upo
 
 ---
 
-## Module 1: Environment Setup & Project Scaffolding 🏗️
+## Module 1: Environment Setup & Project Scaffolding
 
 **Difficulty:** Beginner
 
@@ -83,7 +83,7 @@ This learning path is structured in **8 progressive modules**, each building upo
    │       │   └── main.tsx
    │       └── public/
    │           └── _redirects  # For static hosting
-   ├── packages/              # (Created in later modules)
+   ├── packages/              # (Created in Module 3)
    │   └── contracts/         # Hardhat 2 + Solidity
    ├── pnpm-workspace.yaml
    └── package.json
@@ -109,15 +109,15 @@ This learning path is structured in **8 progressive modules**, each building upo
 - **Environment Variables**: `.env` for configuration
 
 ### Checkpoint
-✅ Can initialize a React + Vite project from scratch  
-✅ Understands React Router DOM 6 setup with BrowserRouter  
-✅ Has configured `_redirects` for static hosting  
-✅ Understands project structure and configuration files  
-✅ Can explain the purpose of each tool in the stack
+- Can initialize a React + Vite project from scratch
+- Understands React Router DOM 6 setup with BrowserRouter
+- Has configured `_redirects` for static hosting
+- Understands project structure and configuration files
+- Can explain the purpose of each tool in the stack
 
 ---
 
-## Module 2: Web3 Fundamentals & Wallet Integration 🔐
+## Module 2: Web3 Fundamentals & Wallet Integration
 
 **Difficulty:** Beginner
 
@@ -160,12 +160,12 @@ This learning path is structured in **8 progressive modules**, each building upo
 
 5. Understand what each package does
 
-> **📖 Reference**: See `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for complete dependency installation.
+> **Reference**: See `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for complete dependency installation.
 
 #### Exercise 2.2: Configure Alchemy RPC Provider
 1. Get Alchemy API key from [Alchemy](https://www.alchemy.com/)
-   
-   > **📖 Reference**: See `dapp_setup_guides/bc_infrastructure_services.md` for a comprehensive comparison of blockchain infrastructure providers (Alchemy, Infura, QuickNode, etc.) including features, pricing, and use cases. This document helps understand provider options but the setup guides specify Alchemy as the chosen provider.
+
+   > **Reference**: See `dapp_setup_guides/bc_infrastructure_services.md` for a comprehensive comparison of blockchain infrastructure providers (Alchemy, Infura, QuickNode, etc.) including features, pricing, and use cases.
 
 2. Create `apps/frontend/.env.local`:
    ```bash
@@ -176,7 +176,6 @@ This learning path is structured in **8 progressive modules**, each building upo
 
 3. Create `apps/frontend/src/config/providers.ts`:
    ```typescript
-   // Centralized provider configuration
    const ALCHEMY_KEY = import.meta.env.VITE_ALCHEMY_API_KEY;
    if (!ALCHEMY_KEY) {
      throw new Error('VITE_ALCHEMY_API_KEY is required');
@@ -187,95 +186,15 @@ This learning path is structured in **8 progressive modules**, each building upo
    ```
 
 #### Exercise 2.3: Configure Wagmi with RainbowKit
-1. Create `apps/frontend/src/config/chain.ts`:
-   ```typescript
-   import { sepolia } from 'wagmi/chains';
-   
-   export const APP_CHAIN_ID = sepolia.id;
-   export const APP_CHAIN = sepolia;
-   ```
+1. Create `apps/frontend/src/config/chain.ts` and `apps/frontend/src/config/wagmi.ts`
+2. Configure transport selection (WebSocket desktop, HTTP mobile)
+3. Update `apps/frontend/src/main.tsx` to wrap app with providers (BrowserRouter, WagmiProvider, QueryClientProvider, RainbowKitProvider)
 
-2. Create `apps/frontend/src/config/wagmi.ts`:
-   ```typescript
-   import { http, webSocket } from 'wagmi';
-   import { sepolia } from 'wagmi/chains';
-   import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-   import { ALCHEMY_HTTP_SEPOLIA, ALCHEMY_WS_SEPOLIA } from './providers';
-   
-   const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'fallback_id';
-   
-   // Mobile detection for transport selection
-   const isMobile = typeof window !== 'undefined' && 
-     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-   
-   export const config = getDefaultConfig({
-     appName: 'DApp Learning',
-     projectId,
-     chains: [sepolia],
-     transports: {
-       [sepolia.id]: isMobile 
-         ? http(ALCHEMY_HTTP_SEPOLIA)  // Mobile: HTTP
-         : webSocket(ALCHEMY_WS_SEPOLIA),  // Desktop: WebSocket-only
-     },
-     ssr: false,  // Client-side only
-   });
-   ```
-
-3. Update `apps/frontend/src/main.tsx` to wrap app with providers:
-   ```typescript
-   import { WagmiProvider } from 'wagmi';
-   import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-   import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-   import { BrowserRouter } from 'react-router-dom';
-   import { config } from './config/wagmi';
-   import '@rainbow-me/rainbowkit/styles.css';
-   
-   const queryClient = new QueryClient({
-     defaultOptions: {
-       queries: {
-         placeholderData: (previousData) => previousData,  // Prevent flicker
-         refetchOnWindowFocus: false,
-         staleTime: 30_000,
-       },
-     },
-   });
-   
-   // Wrap app with providers (BrowserRouter → WagmiProvider → QueryClientProvider → RainbowKitProvider)
-   ```
-
-> **📖 Reference**: See `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for complete Wagmi configuration.
+> **Reference**: See `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for complete Wagmi configuration.
 
 #### Exercise 2.4: Create Wallet Connection Component
-1. Create `apps/frontend/src/components/WalletConnect.tsx`:
-   ```typescript
-   import { ConnectButton } from '@rainbow-me/rainbowkit';
-   
-   export function WalletConnect() {
-     return <ConnectButton />;
-   }
-   ```
-
-2. Use Wagmi hooks for wallet state:
-   ```typescript
-   import { useAccount, useBalance, useChainId } from 'wagmi';
-   
-   export function WalletInfo() {
-     const { address, isConnected } = useAccount();
-     const chainId = useChainId();
-     const { data: balance } = useBalance({ address });
-     
-     if (!isConnected) return <div>Not connected</div>;
-     
-     return (
-       <div>
-         <p>Address: {address}</p>
-         <p>Chain ID: {chainId}</p>
-         <p>Balance: {balance?.formatted} {balance?.symbol}</p>
-       </div>
-     );
-   }
-   ```
-
+1. Create wallet connect component using RainbowKit's `ConnectButton`
+2. Use Wagmi hooks for wallet state (`useAccount`, `useBalance`, `useChainId`)
 3. Handle chain switching and connection states
 
 #### Exercise 2.5: Understanding Viem and the Wagmi-Viem Relationship
@@ -284,36 +203,118 @@ This learning path is structured in **8 progressive modules**, each building upo
 3. Learn Viem utility functions (`formatUnits`, `parseUnits`, `isAddress`, etc.)
 4. Create utility functions using Viem directly
 5. Understand when to use Viem vs Wagmi hooks
-6. Create a direct Viem client for non-React contexts
 
-> **📖 Key Concept**: Wagmi provides React hooks for Ethereum, but it's built on Viem. Viem is the low-level TypeScript Ethereum library. Viem was chosen over alternatives (ethers.js, web3.js) for its TypeScript-first design, smaller bundle sizes, modern architecture, and excellent Wagmi integration. Use Wagmi hooks in React components, but use Viem utilities for formatting, validation, and non-React contexts.
+> **Key Concept**: Wagmi provides React hooks for Ethereum, but it's built on Viem. Use Wagmi hooks in React components, but use Viem utilities for formatting, validation, and non-React contexts.
 
 ### Key Concepts
-- **Web3 Library Landscape**: Alternatives include ethers.js and web3.js, but Viem was chosen for TypeScript-first design, smaller bundles, and modern architecture
-- **Viem**: Low-level TypeScript Ethereum library (foundation) - chosen for type safety, performance, and modern design
+- **Viem**: Low-level TypeScript Ethereum library (foundation)
 - **Wagmi**: React hooks wrapper around Viem (React convenience layer)
-- **When to use each**: Wagmi hooks for React components, Viem utilities for pure functions, Viem clients for non-React contexts
+- **When to use each**: Wagmi hooks for React components, Viem utilities for pure functions
 - **EVM Chains**: Understanding different networks (Mainnet, Testnets, Local)
 - **RPC Providers**: Alchemy with WebSocket (desktop) / HTTP (mobile) transport selection
-  - **Reference**: See `dapp_setup_guides/bc_infrastructure_services.md` for provider comparison and information
 - **Wallet Providers**: How wallets interact with DApps via WalletConnect
 - **React Context**: How RainbowKit/Wagmi provide global state
-- **Hooks Pattern**: Using React hooks for blockchain data
 - **TanStack Query**: Data fetching and caching layer
-- **Monorepo Structure**: Frontend in `apps/frontend/`, configs in `src/config/`
 
 ### Checkpoint
-✅ Can connect and disconnect wallets  
-✅ Understands wallet connection flow  
-✅ Can display wallet information (address, balance, network)
-✅ Understands the relationship between Wagmi and Viem
-✅ Knows when to use Viem utilities vs Wagmi hooks
+- Can connect and disconnect wallets
+- Understands wallet connection flow
+- Can display wallet information (address, balance, network)
+- Understands the relationship between Wagmi and Viem
+- Knows when to use Viem utilities vs Wagmi hooks
 
 ---
 
-## Module 3: Reading Blockchain Data 📖
+## Module 3: Smart Contract Development & Deployment
 
 **Difficulty:** Beginner-Intermediate
+
+### Learning Objectives
+- Understand Solidity fundamentals (types, functions, events, modifiers)
+- Set up Hardhat 2 for contract compilation, testing, and deployment
+- Write smart contracts with NatSpec documentation
+- Write comprehensive contract tests
+- Deploy to local Hardhat network and Sepolia testnet
+- Share ABIs with the frontend
+- Use OpenZeppelin contract libraries and upgradeable patterns
+- Verify contracts on Sourcify and Blockscout
+
+### Prerequisites
+- Completed Module 2
+- Basic programming knowledge
+
+### Exercises
+
+#### Exercise 3.1: Solidity Fundamentals
+1. Learn Solidity value types, visibility modifiers, function types
+2. Understand events, custom errors, mappings, structs, enums
+3. Understand `storage` vs `memory` vs `calldata`
+
+#### Exercise 3.2: Set Up Hardhat 2 in the Monorepo
+1. Create `packages/contracts/` with Hardhat 2
+2. Install OpenZeppelin contracts and plugins
+3. Configure hardhat.config.cjs
+4. Add root workspace scripts
+
+#### Exercise 3.3: Write Your First Smart Contract
+1. Write a SimpleStorage contract with NatSpec
+2. Include events (ValueSet, StringSet)
+3. Compile and understand the generated ABI
+
+#### Exercise 3.4: Write Contract Tests
+1. Write tests using Chai and Hardhat
+2. Test deployment, state changes, events, edge cases
+3. Understand `beforeEach`, `connect()`, `.to.emit()`
+
+#### Exercise 3.5: Deploy to Local Hardhat Network
+1. Create deployment script
+2. Run local Hardhat node
+3. Deploy and interact via Hardhat console
+
+#### Exercise 3.6: Deploy to Sepolia Testnet
+1. Get testnet ETH from a faucet
+2. Configure environment for Sepolia
+3. Deploy and verify on block explorer
+
+#### Exercise 3.7: Share ABIs with the Frontend
+1. Extract ABI from compilation artifacts
+2. Create contract info file in `apps/frontend/src/contracts/`
+3. Configure contract address and ABI for frontend import
+
+#### Exercise 3.8: OpenZeppelin Contracts & Upgradeable Patterns
+1. Write a standard ERC-20 token using OpenZeppelin
+2. Write an upgradeable ERC-20 using OpenZeppelin Upgradeable
+3. Deploy using `upgrades.deployProxy()`
+4. Understand proxy pattern basics
+
+#### Exercise 3.9: Contract Verification (Sourcify + Blockscout)
+1. Verify on Sourcify (no API key required)
+2. Verify on Blockscout (no API key required)
+3. No Etherscan API keys needed
+
+### Key Concepts
+- **Solidity**: Types, functions, events, modifiers, inheritance
+- **NatSpec**: Documentation standard for Solidity contracts
+- **Hardhat 2**: Compilation, testing, deployment, local network
+- **Testing**: Chai assertions, event testing, account management
+- **ABI**: How the frontend communicates with contracts
+- **OpenZeppelin**: Audited contract libraries (ERC-20, Ownable, etc.)
+- **Upgradeable Contracts**: Proxy pattern, `initialize()` instead of constructor
+- **Contract Verification**: Sourcify first, then Blockscout (no API keys)
+
+### Checkpoint
+- Can write Solidity contracts with NatSpec
+- Can test contracts comprehensively
+- Can deploy to local and testnet
+- Understands OpenZeppelin inheritance
+- Knows how to share ABIs with frontend
+- Can verify contracts on Sourcify/Blockscout
+
+---
+
+## Module 4: Reading Blockchain Data
+
+**Difficulty:** Intermediate
 
 ### Learning Objectives
 - Understand how to read data from smart contracts
@@ -323,479 +324,141 @@ This learning path is structured in **8 progressive modules**, each building upo
 - Understand the difference between read and write operations
 
 ### Prerequisites
-- Completed Module 2
-- Basic understanding of smart contracts
+- Completed Module 3 (contract deployed, ABI shared with frontend)
 
 ### Exercises
 
-#### Exercise 3.1: Deploy a Simple Contract (or use existing)
-1. Use a simple contract like:
-   ```solidity
-   contract SimpleStorage {
-       uint256 public storedValue;
-       string public storedString;
-       
-       function setValue(uint256 _value) public {
-           storedValue = _value;
-       }
-       
-       function setString(string memory _str) public {
-           storedString = _str;
-       }
-   }
-   ```
-2. Deploy to Sepolia testnet (or use Hardhat local network)
-3. Get the contract address and ABI
+#### Exercise 4.1: Set Up Scopes Pattern for Cache Management
+1. Create centralized scopes for TanStack Query cache invalidation
+2. Create helper functions for targeted invalidation
 
-#### Exercise 3.2: Read Contract State with TanStack Query Scopes
-1. Create `apps/frontend/src/lib/scopes.ts` for query key management:
-   ```typescript
-   export const scopes = {
-     storedValue: (chainId: number, address: string) =>
-       ['contract', 'storedValue', chainId, address.toLowerCase()] as const,
-     storedString: (chainId: number, address: string) =>
-       ['contract', 'storedString', chainId, address.toLowerCase()] as const,
-   };
-   ```
+#### Exercise 4.2: Read Simple Contract State
+1. Use `useReadContract` with contract info from Module 3
+2. Handle loading and error states properly
+3. Use scope keys for cache management
 
-2. Use `useReadContract` (Wagmi 2) with scope keys:
-   ```typescript
-   import { useReadContract } from 'wagmi';
-   import { useChainId } from 'wagmi';
-   import { scopes } from '@/lib/scopes';
-   
-   export function ReadValue({ contractAddress, abi }) {
-     const chainId = useChainId();
-     
-     const { data, isLoading, error } = useReadContract({
-       address: contractAddress,
-       abi,
-       functionName: 'storedValue',
-       query: {
-         scopeKey: scopes.storedValue(chainId, contractAddress),
-         staleTime: 30_000,
-       },
-     });
-     
-     if (isLoading) return <div>Loading...</div>;
-     if (error) return <div>Error: {error.message}</div>;
-     
-     return <div>Value: {data?.toString()}</div>;
-   }
-   ```
+#### Exercise 4.3: Read Multiple Values
+1. Use `useReadContracts` for batch reading
+2. Use TanStack Query's `placeholderData` to prevent flicker on refetch
 
-3. Handle loading and error states properly
+#### Exercise 4.4: Read ERC-20 Token Data
+1. Read token name, symbol, decimals, total supply
+2. Read user's token balance
+3. Display formatted token amounts (considering decimals)
 
-#### Exercise 3.3: Read Multiple Values
-1. Use `useReadContracts` (Wagmi 2) for batch reading:
-   ```typescript
-   const { data, isLoading } = useReadContracts({
-     contracts: [
-       { address, abi, functionName: 'storedValue' },
-       { address, abi, functionName: 'storedString' },
-     ],
-     query: {
-       scopeKey: ['contract', 'batch', chainId, address],
-     },
-   });
-   ```
-
-2. Create a component that displays all contract state
-3. Use TanStack Query's `placeholderData` to prevent flicker on refetch
-
-#### Exercise 3.4: Read ERC-20 Token Data
-1. Use a standard ERC-20 contract (e.g., USDC on Sepolia)
-2. Read token name, symbol, decimals, total supply
-3. Read user's token balance
-4. Display formatted token amounts (considering decimals)
-
-#### Exercise 3.5: Event Listening (Basic)
-1. Use `useWatchContractEvent` (Wagmi 2) for basic event watching:
-   ```typescript
-   import { useWatchContractEvent } from 'wagmi';
-   import { useQueryClient } from '@tanstack/react-query';
-   
-   export function EventListener({ contractAddress, abi }) {
-     const qc = useQueryClient();
-     const chainId = useChainId();
-     
-     useWatchContractEvent({
-       address: contractAddress,
-       abi,
-       eventName: 'ValueSet',
-       onLogs: (logs) => {
-         // Invalidate relevant queries
-         qc.invalidateQueries({ 
-           queryKey: scopes.storedValue(chainId, contractAddress),
-           exact: true 
-         });
-       },
-     });
-     
-     return <div>Listening for events...</div>;
-   }
-   ```
-
-2. Display event logs in real-time
-3. Filter events by specific parameters
-4. Create an event log viewer component
-
-> **Note**: For production apps, use a separate WebSocket client for event watching (covered in Module 5).
+#### Exercise 4.5: Event Listening (Basic)
+1. Use `useWatchContractEvent` for basic event watching
+2. Invalidate relevant queries on events
+3. Display event logs in real-time
 
 ### Key Concepts
 - **ABI (Application Binary Interface)**: How to interact with contracts
 - **Read Operations**: Free, no gas cost, synchronous
 - **TanStack Query 5**: Query scopes pattern for targeted cache invalidation
 - **Scope Keys**: Stable query keys organized by chainId and entity type
-- **Data Fetching**: Prevent flicker with `placeholderData` and proper `staleTime`
-- **Type Safety**: Using TypeScript with contract ABIs
 - **Wagmi 2 Hooks**: `useReadContract`, `useReadContracts`, `useWatchContractEvent`
 
 ### Checkpoint
-✅ Can read any public contract variable  
-✅ Understands loading and error handling  
-✅ Can work with different data types  
-✅ Can listen to and display contract events
+- Can read any public contract variable
+- Understands loading and error handling
+- Can work with different data types
+- Can listen to and display contract events
 
 ---
 
-## Module 4: Writing to Blockchain (Transactions) ✍️
+## Module 5: Writing to Blockchain (Transactions)
 
 **Difficulty:** Intermediate
 
 ### Learning Objectives
-- Understand transaction lifecycle (prepare → sign → send → confirm)
+- Understand transaction lifecycle (prepare, sign, send, confirm)
 - Use WAGMI hooks for writing to contracts
 - Handle transaction states (pending, success, error)
-- Implement transaction feedback (toasts, loading states)
+- Implement transaction feedback (overlays, loading states)
 - Understand gas estimation and transaction costs
 - Handle user rejection of transactions
 
 ### Prerequisites
-- Completed Module 3
+- Completed Module 4
 - Understanding of gas and transaction fees
 
 ### Exercises
 
-#### Exercise 4.1: Write to Contract (Simple)
-1. Use `useWriteContract` (Wagmi 2) for writing:
-   ```typescript
-   import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-   import { useQueryClient } from '@tanstack/react-query';
-   
-   export function SetValue({ contractAddress, abi }) {
-     const qc = useQueryClient();
-     const chainId = useChainId();
-     
-     const { writeContract, data: hash, isPending, error } = useWriteContract();
-     const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ 
-       hash 
-     });
-     
-     const handleSetValue = () => {
-       writeContract({
-         address: contractAddress,
-         abi,
-         functionName: 'setValue',
-         args: [123],
-       });
-     };
-     
-     // Invalidate queries after success
-     if (isSuccess) {
-       qc.invalidateQueries({ 
-         queryKey: scopes.storedValue(chainId, contractAddress),
-         exact: true 
-       });
-     }
-     
-     return (
-       <button 
-         onClick={handleSetValue}
-         disabled={isPending || isConfirming}
-       >
-         {isPending ? 'Confirming...' : 'Set Value'}
-       </button>
-     );
-   }
-   ```
+#### Exercise 5.1: Create Transaction Overlay System (REQUIRED)
+1. Create modal store with Zustand
+2. Create TransactionOverlay component (pending + confirming states)
+3. Create SuccessOverlay component
+4. Create ModalManager and add to App
 
-2. Create a form to input new value
-3. Handle transaction states (`isPending`, `isConfirming`)
+#### Exercise 5.2: Write to Contract (Simple)
+1. Use `useWriteContract` and `useWaitForTransactionReceipt`
+2. Integrate with transaction overlay
+3. Invalidate cache after success
 
-#### Exercise 4.2: Transaction Overlay System (REQUIRED)
-1. Create transaction overlay component (see setup guides for full implementation):
-   ```typescript
-   // apps/frontend/src/components/ui/TransactionOverlay.tsx
-   export function TransactionOverlay({ 
-     isVisible, 
-     type,  // 'pending' | 'confirming'
-     title,
-     message 
-   }) {
-     if (!isVisible) return null;
-     
-     return (
-       <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50">
-         <div className="flex items-center justify-center h-full">
-           <div className="bg-white rounded-xl p-8">
-             <h3>{title || (type === 'pending' ? 'Waiting for Signature' : 'Processing')}</h3>
-             <p>{message}</p>
-           </div>
-         </div>
-       </div>
-     );
-   }
-   ```
-
-2. Integrate overlay with transaction hooks:
-   ```typescript
-   {(isPending || isConfirming) && (
-     <TransactionOverlay
-       isVisible={true}
-       type={isPending ? 'pending' : 'confirming'}
-     />
-   )}
-   ```
-
-3. Display transaction hash with link to block explorer
-4. Show success state after confirmation
-
-> **📖 Reference**: See `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for complete overlay system implementation.
-
-#### Exercise 4.3: Gas Estimation
+#### Exercise 5.3: Gas Estimation
 1. Estimate gas before sending transaction
 2. Display estimated gas cost to user
-3. Allow user to set custom gas limit
-4. Handle gas estimation errors
 
-#### Exercise 4.4: Complex Transaction (Multiple Parameters)
+#### Exercise 5.4: Complex Transaction with Validation
 1. Create transaction with multiple parameters
 2. Validate inputs before sending
-3. Handle different data types (address, uint256, string, arrays)
-4. Create a comprehensive form with validation
-
-#### Exercise 4.5: Batch Transactions
-1. Understand when to use multicall
-2. Implement multiple writes in sequence
-3. Handle partial failures
-4. Create a transaction queue component
-
-#### Exercise 4.6: Transaction History
-1. Fetch user's transaction history
-2. Display list of past transactions
-3. Filter by contract, status, date
-4. Link to block explorer for each transaction
 
 ### Key Concepts
-- **Transaction Lifecycle**: From initiation (`isPending`) → confirmation (`isConfirming`) → success
-- **Transaction Overlay System**: REQUIRED for production UX (full-screen feedback)
+- **Transaction Lifecycle**: From initiation (isPending) to confirmation (isConfirming) to success
+- **Transaction Overlay System**: REQUIRED for production UX
 - **Gas**: Understanding gas limits, gas prices, and total cost
-- **User Experience**: Clear feedback during async operations (overlays, not just toasts)
-- **Error Handling**: Network errors, user rejection, contract errors
 - **Cache Invalidation**: Invalidate relevant queries after successful transactions
 - **Wagmi 2 Hooks**: `useWriteContract`, `useWaitForTransactionReceipt`
 
 ### Checkpoint
-✅ Can send transactions successfully  
-✅ Understands transaction states  
-✅ Can estimate and display gas costs  
-✅ Handles errors gracefully  
-✅ Provides good UX feedback
+- Can send transactions successfully
+- Understands transaction states
+- Can estimate and display gas costs
+- Handles errors gracefully
+- Provides good UX feedback
 
 ---
 
-## Module 5: Advanced Contract Interactions 🚀
+## Module 6: Advanced Contract Interactions
 
 **Difficulty:** Intermediate-Advanced
 
 ### Learning Objectives
-- Work with complex contract interactions
 - Implement approval patterns (ERC-20, ERC-721)
 - Handle contract interactions that require multiple steps
-- Work with contract factories and deployments
-- Understand proxy patterns and upgradeable contracts (OpenZeppelin 5)
-- Set up Hardhat 2 for smart contract development
-- Deploy and verify contracts (Sourcify first, then Blockscout)
+- Set up a production real-time event system (separate WebSocket client)
 
 ### Prerequisites
-- Completed Module 4
+- Completed Module 5
 - Understanding of ERC standards
-- Basic Solidity knowledge
 
 ### Exercises
 
-#### Exercise 5.0: Set Up Hardhat 2 (Smart Contract Development)
-1. Create contracts package in monorepo:
-   ```bash
-   cd packages
-   mkdir contracts && cd contracts
-   pnpm init
-   ```
+#### Exercise 6.1: ERC-20 Token Transfer with Approval
+1. Implement two-step transaction flow (approve then transfer)
+2. Check and display allowance
+3. Handle both transactions with overlay feedback
 
-2. Install Hardhat 2 and dependencies:
-   ```bash
-   pnpm add -D hardhat@^2.26.1 @nomicfoundation/hardhat-toolbox@^6.1.0
-   pnpm add -D @openzeppelin/contracts@^5.4.0 @openzeppelin/contracts-upgradeable@^5.4.0
-   pnpm add -D @openzeppelin/hardhat-upgrades@^3.5.0
-   ```
-
-3. Initialize Hardhat:
-   ```bash
-   pnpm exec hardhat init
-   # Choose "Create a JavaScript project" (CommonJS)
-   ```
-
-4. Configure `hardhat.config.cjs`:
-   ```javascript
-   require("@nomicfoundation/hardhat-toolbox");
-   require("@openzeppelin/hardhat-upgrades");
-   
-   module.exports = {
-     solidity: {
-       version: "0.8.22",
-       settings: {
-         optimizer: { enabled: true, runs: 200 },
-       },
-     },
-     networks: {
-       hardhat: { chainId: 1337 },
-       sepolia: {
-         url: process.env.SEPOLIA_URL,
-         accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-       },
-     },
-   };
-   ```
-
-> **📖 Reference**: See `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for complete Hardhat setup.
-
-#### Exercise 5.1: Deploy Upgradeable Contract
-1. Create upgradeable contract using OpenZeppelin:
-   ```solidity
-   // packages/contracts/contracts/MyToken.sol
-   import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-   import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-   import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-   
-   contract MyToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
-       function initialize() public initializer {
-           __ERC20_init("MyToken", "MTK");
-           __Ownable_init(msg.sender);
-           _mint(msg.sender, 1000000 * 10**decimals());
-       }
-   }
-   ```
-
-2. Deploy using OpenZeppelin upgrades plugin:
-   ```javascript
-   // packages/contracts/scripts/deploy.js
-   const { ethers, upgrades } = require("hardhat");
-   
-   async function main() {
-     const MyToken = await ethers.getContractFactory("MyToken");
-     const myToken = await upgrades.deployProxy(MyToken, [], { 
-       initializer: "initialize" 
-     });
-     await myToken.waitForDeployment();
-     console.log("MyToken deployed to:", await myToken.getAddress());
-   }
-   ```
-
-3. Verify on Sourcify first, then Blockscout (no API keys required)
-
-#### Exercise 5.2: ERC-20 Token Transfer
-1. Implement token transfer functionality
-2. Handle token approval before transfer
-3. Check and display allowance
-4. Create a token transfer component with approval flow
-
-#### Exercise 5.2: ERC-721 NFT Interactions
-1. Read NFT metadata (name, symbol, tokenURI)
-2. Display NFT collection
-3. Implement NFT transfer
-4. Handle approval for NFT transfers
-5. Create an NFT gallery component
-
-#### Exercise 5.3: Multi-Step Contract Interactions
-1. Create a flow requiring multiple transactions:
-   - Approve token spending
-   - Deposit tokens
-   - Perform action
-   - Withdraw tokens
-2. Track progress through multi-step flow
-3. Handle failures at any step
-4. Allow user to retry failed steps
-
-#### Exercise 5.4: Contract Factory Pattern
-1. Deploy new contracts from a factory
-2. Track deployed contract addresses
-3. Interact with newly deployed contracts
-4. Create a contract deployment interface
-
-#### Exercise 5.5: Real-Time Event System (Production)
-1. Create separate WebSocket client for event watching:
-   ```typescript
-   // apps/frontend/src/realtime/wsClient.ts
-   import { createPublicClient, webSocket } from 'viem';
-   import { APP_CHAIN } from '@/config/chain';
-   import { ALCHEMY_WS_SEPOLIA } from '@/config/providers';
-   
-   export const wsClient = createPublicClient({
-     chain: APP_CHAIN,
-     transport: webSocket(ALCHEMY_WS_SEPOLIA),
-   });
-   ```
-
-2. Create global event hook:
-   ```typescript
-   // apps/frontend/src/realtime/useGlobalEvents.ts
-   import { wsClient } from './wsClient';
-   import { useQueryClient } from '@tanstack/react-query';
-   
-   export function useGlobalEvents(watchAddresses: `0x${string}`[]) {
-     const qc = useQueryClient();
-     
-     useEffect(() => {
-       const unsubscribe = wsClient.watchContractEvent({
-         address: watchAddresses,
-         abi: CONTRACT_ABI,
-         eventName: 'ValueSet',
-         poll: false,  // WebSocket-only, no HTTP polling
-         onLogs: (logs) => {
-           // Invalidate relevant queries
-           qc.invalidateQueries({ queryKey: ['contract', 'events'] });
-         },
-       });
-       
-       return () => unsubscribe();
-     }, [watchAddresses, qc]);
-   }
-   ```
-
+#### Exercise 6.2: Real-Time Event System (Production)
+1. Create separate WebSocket client for event watching
+2. Create global event hook with targeted cache invalidation
 3. Mount at app root for real-time updates
 
-> **📖 Reference**: See `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for complete event system.
-
 ### Key Concepts
-- **Approval Patterns**: Two-step transactions (approve → transfer)
+- **Approval Patterns**: Two-step transactions (approve then transfer)
 - **ERC Standards**: Understanding common token standards
-- **Upgradeable Contracts**: OpenZeppelin 5 patterns (UUPS, TransparentProxy)
-- **Hardhat 2**: Modern development environment
-- **Contract Verification**: Sourcify first, then Blockscout (no API keys)
 - **Real-Time Events**: Separate WebSocket client prevents HTTP polling
 - **Transaction Sequencing**: Ordering dependent transactions
-- **Error Recovery**: Handling partial failures
 
 ### Checkpoint
-✅ Can implement complex multi-step interactions  
-✅ Understands approval patterns  
-✅ Can work with ERC-20 and ERC-721  
-✅ Handles conditional logic in transactions
+- Can implement complex multi-step interactions
+- Understands approval patterns
+- Can work with ERC-20 and ERC-721
+- Real-time event system working
 
 ---
 
-## Module 6: State Management & Data Fetching 📊
+## Module 7: State Management & Data Fetching
 
 **Difficulty:** Intermediate
 
@@ -804,403 +467,133 @@ This learning path is structured in **8 progressive modules**, each building upo
 - Cache blockchain data effectively with TanStack Query 5
 - Implement scopes pattern for targeted cache invalidation
 - Handle data synchronization across components
-- Understand React Query patterns in web3
 - Prevent UI flicker with proper cache configuration
 
 ### Prerequisites
-- Completed Module 5
+- Completed Module 6
 - Understanding of React state management
 
 ### Exercises
 
-#### Exercise 6.1: Global State Management with Zustand 4
-1. Create Zustand store for UI state:
-   ```typescript
-   // apps/frontend/src/stores/uiStore.ts
-   import { create } from 'zustand';
-   import { persist } from 'zustand/middleware';
-   
-   interface UIState {
-     theme: 'light' | 'dark';
-     setTheme: (theme: 'light' | 'dark') => void;
-   }
-   
-   export const useUIStore = create<UIState>()(
-     persist(
-       (set) => ({
-         theme: 'light',
-         setTheme: (theme) => set({ theme }),
-       }),
-       { name: 'ui-storage' }
-     )
-   );
-   ```
-
+#### Exercise 7.1: Global State Management with Zustand 4
+1. Create Zustand store for UI state
 2. Use for UI state only (NOT for blockchain data)
 3. Persist state to localStorage
-4. Sync state across components
 
-> **Important**: Use Zustand for UI state only. Blockchain data comes from Wagmi + TanStack Query.
+#### Exercise 7.2: Advanced Scopes Pattern
+1. Expand scopes with pagination, umbrella keys
+2. Implement debounced invalidation to prevent flicker
+3. Create helper functions for common invalidation patterns
 
-#### Exercise 6.2: Scopes Pattern for Cache Invalidation
-1. Centralize scope keys in `apps/frontend/src/lib/scopes.ts`:
-   ```typescript
-   export const scopes = {
-     orgData: (chainId: number, address: string) =>
-       ['orgs', 'data', chainId, address.toLowerCase()] as const,
-     orgCount: (chainId: number) =>
-       ['orgs', 'count', chainId] as const,
-     orgPage: (chainId: number, page: number, size: number) =>
-       ['orgs', 'page', chainId, page, size] as const,
-   };
-   ```
-
-2. Use scope keys in queries:
-   ```typescript
-   const { data } = useReadContract({
-     query: {
-       scopeKey: scopes.orgData(chainId, address),
-       staleTime: 30_000,
-     },
-   });
-   ```
-
-3. Invalidate targeted scopes after mutations:
-   ```typescript
-   const qc = useQueryClient();
-   qc.invalidateQueries({ 
-     queryKey: scopes.orgData(chainId, address),
-     exact: true 
-   });
-   ```
-
-4. Prevent flicker with `placeholderData`:
-   ```typescript
-   const queryClient = new QueryClient({
-     defaultOptions: {
-       queries: {
-         placeholderData: (previousData) => previousData,
-         refetchOnWindowFocus: false,
-         staleTime: 30_000,
-       },
-     },
-   });
-   ```
-
-#### Exercise 6.3: Optimistic Updates
-1. Update UI immediately before transaction confirms
-2. Revert on transaction failure
-3. Implement optimistic updates for balance changes
-4. Handle race conditions
-
-#### Exercise 6.4: Real-time Data Sync
-1. Use WebSocket or polling for real-time updates
-2. Sync data across multiple browser tabs
-3. Implement data refresh strategies
-4. Handle network reconnection
-
-#### Exercise 6.5: Data Aggregation
-1. Fetch data from multiple contracts
-2. Aggregate and transform data
-3. Create custom hooks for complex data fetching
-4. Implement data normalization
+#### Exercise 7.3: Prevent UI Flicker with placeholderData
+1. Configure QueryClient with `placeholderData`
+2. Use in components for smooth UI updates
 
 ### Key Concepts
 - **Zustand 4**: Lightweight state management for UI state only
 - **TanStack Query 5**: Scopes pattern for organized cache invalidation
-- **Scope Keys**: Stable, hierarchical query keys (chainId, entity type, id)
-- **Targeted Invalidation**: Invalidate specific scopes, not entire cache
-- **Prevent Flicker**: Use `placeholderData` to keep previous data while refetching
 - **State Separation**: Wagmi for blockchain state, TanStack Query for caching, Zustand for UI
-- **Custom Hooks**: Reusable data fetching logic with proper scopes
+- **Prevent Flicker**: Use `placeholderData` to keep previous data while refetching
 
 ### Checkpoint
-✅ Can manage complex application state  
-✅ Understands caching strategies  
-✅ Implements optimistic updates  
-✅ Creates reusable data fetching hooks
+- Can manage complex application state
+- Understands caching strategies
+- Creates reusable data fetching hooks
 
 ---
 
-## Module 7: User Experience & Best Practices 🎨
+## Module 8: User Experience & Best Practices
 
 **Difficulty:** Intermediate-Advanced
 
 ### Learning Objectives
-- Design intuitive DApp interfaces
-- Implement transaction overlay system (REQUIRED for production)
 - Implement connection health monitoring
 - Handle edge cases and errors gracefully
 - Implement loading states and skeletons
 - Create responsive designs
-- Follow web3 UX best practices
-- Implement accessibility features
 
 ### Prerequisites
-- Completed Module 6
+- Completed Module 7
 - Basic understanding of UI/UX principles
 
 ### Exercises
 
-#### Exercise 7.1: Transaction Overlay System (REQUIRED)
-1. Create modal store with Zustand:
-   ```typescript
-   // apps/frontend/src/stores/modalStore.ts
-   import { create } from 'zustand';
-   
-   type ModalType = 'transaction' | 'success' | null;
-   
-   export const useModalStore = create<{
-     current: ModalType;
-     payload?: Record<string, unknown>;
-     open: (type: ModalType, payload?: Record<string, unknown>) => void;
-     close: () => void;
-   }>((set) => ({
-     current: null,
-     payload: undefined,
-     open: (type, payload) => set({ current: type, payload }),
-     close: () => set({ current: null, payload: undefined }),
-   }));
-   ```
+#### Exercise 8.1: Connection Health Monitoring
+1. Create connection health store with Zustand
+2. Implement periodic health checks (`getBlockNumber()`)
+3. Show connection indicator in UI
+4. Implement exponential backoff for reconnection
 
-2. Create transaction overlay component (see Module 4)
-3. Create success overlay component
-4. Integrate with Wagmi hooks (`isPending`, `isConfirming`)
+#### Exercise 8.2: Enhanced Error Handling
+1. Map contract errors to user-friendly messages
+2. Create error display component
+3. Handle user rejections differently from actual errors
 
-> **📖 Reference**: See `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for complete overlay system.
+#### Exercise 8.3: Loading States and Skeletons
+1. Create skeleton components
+2. Use in loading states for smooth UX
 
-#### Exercise 7.2: Connection Health Monitoring
-1. Create connection health store:
-   ```typescript
-   // apps/frontend/src/stores/connectionHealthStore.ts
-   import { create } from 'zustand';
-   
-   type ConnectionQuality = 'excellent' | 'good' | 'poor' | 'failed';
-   
-   export const useConnectionHealthStore = create<{
-     quality: ConnectionQuality;
-     consecutiveFailures: number;
-     updateHealth: (quality: ConnectionQuality) => void;
-   }>((set) => ({
-     quality: 'excellent',
-     consecutiveFailures: 0,
-     updateHealth: (quality) => set({ quality }),
-   }));
-   ```
-
-2. Implement health checks (periodic `getBlockNumber()`)
-3. Track response time and consecutive failures
-4. Show connection indicator in UI
-5. Implement exponential backoff for reconnection
-
-#### Exercise 7.3: Error Handling & User Feedback
-1. Create comprehensive error handling system
-2. Map contract errors to user-friendly messages
-3. Implement toast notifications (in addition to overlays)
-4. Create error boundary components
-5. Handle network errors gracefully
-
-#### Exercise 7.2: Loading States & Skeletons
-1. Design loading skeletons for async operations
-2. Implement progressive loading
-3. Show transaction progress indicators
-4. Create smooth transitions between states
-
-#### Exercise 7.3: Responsive Design
-1. Make DApp mobile-friendly
-2. Test wallet connection on mobile devices
-3. Optimize for different screen sizes
-4. Handle mobile wallet apps (WalletConnect)
-
-#### Exercise 7.4: Transaction Feedback
-1. Create transaction status modals
-2. Show transaction progress (pending → confirming → confirmed)
-3. Display transaction details and links
-4. Implement transaction history with filters
-
-#### Exercise 7.5: Form Validation & UX
-1. Validate inputs before transactions
-2. Show helpful error messages
-3. Prevent invalid transactions
-4. Implement input formatting (addresses, amounts)
-
-#### Exercise 7.6: Accessibility
-1. Add ARIA labels to interactive elements
-2. Ensure keyboard navigation works
-3. Test with screen readers
-4. Maintain color contrast ratios
-5. Add focus indicators
-
-#### Exercise 7.7: Performance Optimization
-1. Implement code splitting
-2. Lazy load components
-3. Optimize image loading
-4. Reduce bundle size
-5. Implement virtual scrolling for long lists
+#### Exercise 8.4: Responsive Design
+1. Make DApp mobile-friendly with Tailwind responsive classes
+2. Test wallet connection and transaction overlays on mobile
 
 ### Key Concepts
-- **Transaction Overlay System**: REQUIRED for production UX (full-screen feedback)
 - **Connection Health**: Monitor RPC health and show status to users
-- **Web3 UX Patterns**: Common patterns in successful DApps
 - **Error Communication**: Translating technical errors to user language
 - **Progressive Enhancement**: Building for all devices
-- **Accessibility**: Making DApps usable for everyone
 - **Mobile Optimization**: HTTP transport for mobile, WebSocket for desktop
 
 ### Checkpoint
-✅ Creates intuitive and responsive interfaces  
-✅ Handles all error cases gracefully  
-✅ Provides excellent user feedback  
-✅ Follows accessibility best practices  
-✅ Optimizes for performance
+- Creates intuitive and responsive interfaces
+- Handles all error cases gracefully
+- Provides excellent user feedback
 
 ---
 
-## Module 8: Advanced Topics & Production Readiness 🏆
+## Module 9: Advanced Topics & Production Readiness
 
 **Difficulty:** Advanced
 
 ### Learning Objectives
-- Understand security best practices
-- Implement testing strategies
-- Set up CI/CD pipelines
-- Handle production deployments
-- Monitor and debug production issues
-- Understand gas optimization
-- Implement analytics and monitoring
+- Implement build versioning
+- Set up testing strategies
+- Handle production builds and deployment
+- Understand production optimization (manual chunks, code splitting)
 
 ### Prerequisites
-- Completed Module 7
+- Completed Module 8
 - Understanding of production deployment
 
 ### Exercises
 
-#### Exercise 8.1: Contract Verification (Sourcify + Blockscout)
-1. Verify contracts on Sourcify first (no API key required):
-   ```bash
-   # Use Sourcify API or Hardhat plugin
-   pnpm exec hardhat verify --network sepolia <CONTRACT_ADDRESS>
-   ```
+#### Exercise 9.1: Build Versioning
+1. Implement build counter in Vite config
+2. Display build ID in dev mode
 
-2. Verify on Blockscout (no API key required):
-   ```javascript
-   // packages/contracts/hardhat.config.cjs
-   networks: {
-     sepolia: {
-       url: process.env.SEPOLIA_URL,
-       accounts: [process.env.PRIVATE_KEY],
-       verify: {
-         apiUrl: 'https://eth-sepolia.blockscout.com/api',
-         apiKey: 'NO_API_KEY_NEEDED',
-       },
-     },
-   }
-   ```
+#### Exercise 9.2: Testing Strategy
+1. Set up Vitest for frontend testing
+2. Write frontend tests
+3. Verify contract tests from Module 3
 
-3. Never use Etherscan API keys (use Sourcify/Blockscout only)
-
-> **📖 Reference**: See `dapp_setup_guides/001_scaffolding_specs.md` section 7 for verification details.
-
-#### Exercise 8.2: Build Versioning
-1. Configure build counter in `apps/frontend/vite.config.ts`:
-   ```typescript
-   function getBuildNumber(): number {
-     const counterFile = join(process.cwd(), '.build-counter');
-     // Read/increment build counter
-   }
-   
-   export default defineConfig({
-     define: {
-       __BUILD_ID__: JSON.stringify(`build-${getBuildNumber()}`),
-     },
-   });
-   ```
-
-2. Display build ID in dev tools or footer
-3. Use for debugging and support
-
-#### Exercise 8.3: Security Best Practices
-1. Implement input sanitization
-2. Validate contract addresses
-3. Prevent common vulnerabilities (reentrancy, overflow)
-4. Use secure random number generation
-5. Implement rate limiting
-6. Add security headers
-
-#### Exercise 8.4: Testing Strategy
-1. Write unit tests for hooks and utilities
-2. Write integration tests for contract interactions
-3. Set up E2E tests with Playwright/Cypress
-4. Test wallet connection flows
-5. Mock blockchain responses
-6. Achieve good test coverage
-
-#### Exercise 8.5: Environment Configuration
-1. Set up different environments (dev, staging, prod)
-2. Manage environment variables securely
-3. Configure different chains per environment
-4. Use feature flags
-5. Implement environment-specific configurations
-
-#### Exercise 8.6: CI/CD Pipeline
-1. Set up GitHub Actions
-2. Run tests on every PR
-3. Build and deploy automatically
-4. Run linting and type checking
-5. Generate build artifacts
-6. Deploy to Vercel/Netlify
-
-#### Exercise 8.7: Monitoring & Analytics
-1. Set up error tracking (Sentry)
-2. Implement analytics (Mixpanel, Google Analytics)
-3. Monitor transaction success rates
-4. Track user interactions
-5. Set up alerts for critical errors
-
-#### Exercise 8.8: Gas Optimization
-1. Understand gas costs of different operations
-2. Batch transactions when possible
-3. Use events instead of storage when appropriate
-4. Optimize contract interactions
-5. Implement gas price estimation
-
-#### Exercise 8.9: Documentation
-1. Write comprehensive README
-2. Document API/hooks usage
-3. Create user guides
-4. Write developer documentation
-5. Add code comments and JSDoc
-
-#### Exercise 8.10: Final Project
-Create a complete DApp that demonstrates:
-- Wallet connection
-- Reading and writing to contracts
-- Complex state management
-- Excellent UX
-- Error handling
-- Responsive design
-- Production-ready code
+#### Exercise 9.3: Production Build and Deployment
+1. Configure manual chunks for production build
+2. Build and verify output (including `_redirects`)
+3. Test production build locally
 
 ### Key Concepts
-- **Contract Verification**: Sourcify first, then Blockscout (no Etherscan API keys)
 - **Build Versioning**: Build counter system for debugging and support
-- **Security**: Protecting users and their funds
 - **Testing**: Ensuring reliability (Vitest for frontend, Hardhat for contracts)
 - **Deployment**: Static hosting with `_redirects` file (SPA routing)
-- **Monitoring**: Understanding user behavior and errors
-- **Optimization**: Efficient and cost-effective operations
 - **Manual Chunks**: Vite build optimization (vendor, wagmi, rainbowkit chunks)
 
 ### Checkpoint
-✅ Understands security best practices  
-✅ Has comprehensive test coverage  
-✅ Can deploy to production  
-✅ Monitors and debugs issues  
-✅ Creates production-ready code
+- Has comprehensive test coverage
+- Can deploy to production
+- Creates production-ready code
 
 ---
 
-## Capstone Project Ideas 🎯
+## Capstone Project Ideas
 
 After completing all modules, choose one of these projects to demonstrate mastery:
 
@@ -1213,7 +606,7 @@ After completing all modules, choose one of these projects to demonstrate master
 
 ---
 
-## Resources & Further Learning 📚
+## Resources & Further Learning
 
 ### Documentation
 - [RainbowKit Docs](https://rainbowkit.com/)
@@ -1223,12 +616,14 @@ After completing all modules, choose one of these projects to demonstrate master
 - [React Router Docs](https://reactrouter.com/)
 - [Vite Docs](https://vitejs.dev/)
 - [Ethereum.org](https://ethereum.org/en/developers/)
+- [Solidity Docs](https://docs.soliditylang.org/)
+- [OpenZeppelin Docs](https://docs.openzeppelin.com/contracts/)
+- [Hardhat Docs](https://hardhat.org/docs)
 
 ### Tools
 - [Hardhat](https://hardhat.org/) - Development environment
 - [Foundry](https://book.getfoundry.sh/) - Smart contract toolkit
 - [Remix](https://remix.ethereum.org/) - Online IDE
-- [Etherscan](https://etherscan.io/) - Block explorer
 - [Tenderly](https://tenderly.co/) - Debugging and monitoring
 
 ### Communities
@@ -1246,8 +641,5 @@ Each module should be assessed on:
 - **Best Practices**: Follows conventions and patterns
 - **Problem Solving**: Can debug and solve issues independently
 - **Code Quality**: Clean, readable, maintainable code
-
----
-
 
 ---

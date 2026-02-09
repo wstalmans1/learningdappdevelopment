@@ -1,4 +1,4 @@
-# Module 7: User Experience & Best Practices
+# Module 8: User Experience & Best Practices
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -6,13 +6,13 @@
 >
 > The setup guides are the **single source of truth** for scaffolding and architecture decisions.
 
-## Exercise 7.1: Connection Health Monitoring
+## Exercise 8.1: Connection Health Monitoring
 
 ### Objective
 Implement connection health monitoring to track RPC provider health and show status to users.
 
 ### Prerequisites
-- [x] Completed Module 6
+- [x] Completed Module 7
 - [x] Zustand installed
 - [x] Understanding of RPC connections
 
@@ -192,13 +192,13 @@ Implement connection health monitoring to track RPC provider health and show sta
 
 ---
 
-## Exercise 7.2: Enhanced Error Handling
+## Exercise 8.2: Enhanced Error Handling
 
 ### Objective
 Create comprehensive error handling system with user-friendly error messages.
 
 ### Prerequisites
-- [x] Completed Exercise 7.1
+- [x] Completed Exercise 8.1
 - [x] Understanding of error types
 
 ### Instructions
@@ -296,13 +296,13 @@ Create comprehensive error handling system with user-friendly error messages.
 
 ---
 
-## Exercise 7.3: Loading States and Skeletons
+## Exercise 8.3: Loading States and Skeletons
 
 ### Objective
 Implement loading skeletons and smooth loading states for better UX.
 
 ### Prerequisites
-- [x] Completed Exercise 7.2
+- [x] Completed Exercise 8.2
 - [x] Understanding of loading states
 
 ### Instructions
@@ -377,13 +377,13 @@ Implement loading skeletons and smooth loading states for better UX.
 
 ---
 
-## Exercise 7.4: Responsive Design
+## Exercise 8.4: Responsive Design
 
 ### Objective
 Ensure the DApp works well on mobile and desktop devices.
 
 ### Prerequisites
-- [x] Completed Exercise 7.3
+- [x] Completed Exercise 8.3
 - [x] Tailwind CSS configured
 
 ### Instructions
@@ -440,4 +440,4 @@ After completing this module, you should:
 - Know how to implement loading states
 - Create responsive designs
 - Follow web3 UX best practices
-- Proceed to Module 8: Advanced Topics & Production Readiness
+- Proceed to Module 9: Advanced Topics & Production Readiness
