@@ -83,20 +83,20 @@ This repository is organized with numbered files for easy navigation. Here's how
 
 ```
 learningdappdevelopment/
-├── 001_README.md                          # Start here! Main entry point and overview
-├── 002_DAPP_LEARNING_PATH.md              # Complete curriculum overview with all 9 modules
+├── 001_README.md                       # Start here! Main entry point and overview
+├── 002_DAPP_LEARNING_PATH.md           # Complete curriculum overview with all 9 modules
 │
-├── 003_MODULE_1_ENVIRONMENT_SETUP.md      # Module 1: Environment Setup & Project Scaffolding
-├── 004_MODULE_2_WEB3_WALLET_INTEGRATION.md # Module 2: Web3 Fundamentals & Wallet Integration
-├── 005_MODULE_3_SMART_CONTRACT_DEV.md     # Module 3: Smart Contract Development & Deployment
-├── 006_MODULE_4_READING_BLOCKCHAIN.md     # Module 4: Reading Blockchain Data
-├── 007_MODULE_5_WRITING_TRANSACTIONS.md   # Module 5: Writing to Blockchain (Transactions)
-├── 008_MODULE_6_ADVANCED_INTERACTIONS.md  # Module 6: Advanced Contract Interactions
-├── 009_MODULE_7_STATE_MANAGEMENT.md       # Module 7: State Management & Data Fetching
-├── 010_MODULE_8_UX_BEST_PRACTICES.md      # Module 8: User Experience & Best Practices
-├── 011_MODULE_9_PRODUCTION_READINESS.md   # Module 9: Advanced Topics & Production Readiness
+├── 003_ENVIRONMENT_SETUP.md            # Module 1: Environment Setup & Project Scaffolding
+├── 004_WEB3_WALLET_INTEGRATION.md      # Module 2: Web3 Fundamentals & Wallet Integration
+├── 005_SMART_CONTRACT_DEV.md           # Module 3: Smart Contract Development & Deployment
+├── 006_READING_BLOCKCHAIN.md           # Module 4: Reading Blockchain Data
+├── 007_WRITING_TRANSACTIONS.md         # Module 5: Writing to Blockchain (Transactions)
+├── 008_ADVANCED_INTERACTIONS.md        # Module 6: Advanced Contract Interactions
+├── 009_STATE_MANAGEMENT.md             # Module 7: State Management & Data Fetching
+├── 010_UX_BEST_PRACTICES.md            # Module 8: User Experience & Best Practices
+├── 011_PRODUCTION_READINESS.md         # Module 9: Advanced Topics & Production Readiness
 │
-└── 012_QUICK_REFERENCE.md                 # Quick lookup guide (use while working)
+└── 012_QUICK_REFERENCE.md              # Quick lookup guide (use while working)
 ```
 
 ### Setup Guides (Single Source of Truth)
@@ -119,7 +119,7 @@ dapp_setup_guides/
 
 1. **Start with `001_README.md`** - Read the overview and prerequisites
 2. **Read `002_DAPP_LEARNING_PATH.md`** - Understand the full curriculum
-3. **Follow exercises sequentially** - Start with `003_MODULE_1_ENVIRONMENT_SETUP.md`, then `004_MODULE_2_WEB3_WALLET_INTEGRATION.md`, etc.
+3. **Follow exercises sequentially** - Start with `003_ENVIRONMENT_SETUP.md`, then `004_WEB3_WALLET_INTEGRATION.md`, etc.
 4. **Keep `012_QUICK_REFERENCE.md` open** - Use it as a cheat sheet while working
 5. **Refer to setup guides** - When exercises mention setup guides, check `dapp_setup_guides/` folder
 
@@ -129,15 +129,15 @@ dapp_setup_guides/
 
 ### Learning Path
 - **[002_DAPP_LEARNING_PATH.md](./002_DAPP_LEARNING_PATH.md)** - Complete learning path with all modules, exercises, and concepts
-- **[003_MODULE_1_ENVIRONMENT_SETUP.md](./003_MODULE_1_ENVIRONMENT_SETUP.md)** - Module 1: Environment Setup & Project Scaffolding
-- **[004_MODULE_2_WEB3_WALLET_INTEGRATION.md](./004_MODULE_2_WEB3_WALLET_INTEGRATION.md)** - Module 2: Web3 Fundamentals & Wallet Integration
-- **[005_MODULE_3_SMART_CONTRACT_DEV.md](./005_MODULE_3_SMART_CONTRACT_DEV.md)** - Module 3: Smart Contract Development & Deployment
-- **[006_MODULE_4_READING_BLOCKCHAIN.md](./006_MODULE_4_READING_BLOCKCHAIN.md)** - Module 4: Reading Blockchain Data
-- **[007_MODULE_5_WRITING_TRANSACTIONS.md](./007_MODULE_5_WRITING_TRANSACTIONS.md)** - Module 5: Writing to Blockchain (Transactions)
-- **[008_MODULE_6_ADVANCED_INTERACTIONS.md](./008_MODULE_6_ADVANCED_INTERACTIONS.md)** - Module 6: Advanced Contract Interactions
-- **[009_MODULE_7_STATE_MANAGEMENT.md](./009_MODULE_7_STATE_MANAGEMENT.md)** - Module 7: State Management & Data Fetching
-- **[010_MODULE_8_UX_BEST_PRACTICES.md](./010_MODULE_8_UX_BEST_PRACTICES.md)** - Module 8: User Experience & Best Practices
-- **[011_MODULE_9_PRODUCTION_READINESS.md](./011_MODULE_9_PRODUCTION_READINESS.md)** - Module 9: Advanced Topics & Production Readiness
+- **[003_ENVIRONMENT_SETUP.md](./003_ENVIRONMENT_SETUP.md)** - Module 1: Environment Setup & Project Scaffolding
+- **[004_WEB3_WALLET_INTEGRATION.md](./004_WEB3_WALLET_INTEGRATION.md)** - Module 2: Web3 Fundamentals & Wallet Integration
+- **[005_SMART_CONTRACT_DEV.md](./005_SMART_CONTRACT_DEV.md)** - Module 3: Smart Contract Development & Deployment
+- **[006_READING_BLOCKCHAIN.md](./006_READING_BLOCKCHAIN.md)** - Module 4: Reading Blockchain Data
+- **[007_WRITING_TRANSACTIONS.md](./007_WRITING_TRANSACTIONS.md)** - Module 5: Writing to Blockchain (Transactions)
+- **[008_ADVANCED_INTERACTIONS.md](./008_ADVANCED_INTERACTIONS.md)** - Module 6: Advanced Contract Interactions
+- **[009_STATE_MANAGEMENT.md](./009_STATE_MANAGEMENT.md)** - Module 7: State Management & Data Fetching
+- **[010_UX_BEST_PRACTICES.md](./010_UX_BEST_PRACTICES.md)** - Module 8: User Experience & Best Practices
+- **[011_PRODUCTION_READINESS.md](./011_PRODUCTION_READINESS.md)** - Module 9: Advanced Topics & Production Readiness
 - **[012_QUICK_REFERENCE.md](./012_QUICK_REFERENCE.md)** - Quick reference guide for common tasks
 
 ### Setup Guides (Single Source of Truth)
@@ -152,7 +152,7 @@ dapp_setup_guides/
 ## Getting Started
 
 1. **Start with Module 1**: Read `002_DAPP_LEARNING_PATH.md` to understand the full curriculum
-2. **Complete Module 1 Exercises**: Follow `003_MODULE_1_ENVIRONMENT_SETUP.md` step by step
+2. **Complete Module 1 Exercises**: Follow `003_ENVIRONMENT_SETUP.md` step by step
 3. **Progress Sequentially**: Complete each module before moving to the next
 4. **Ask Questions**: Don't hesitate to ask for help when stuck
 5. **Practice**: Build small projects between modules to reinforce learning
