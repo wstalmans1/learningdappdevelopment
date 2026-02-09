@@ -1,4 +1,4 @@
-# Module 2: Web3 Fundamentals & Wallet Integration
+# Web3 Fundamentals & Wallet Integration
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -12,7 +12,7 @@
 Install and understand the core web3 packages needed for DApp development.
 
 ### Prerequisites
-- [x] Completed Module 1
+- [x] Completed Environment Setup & Project Scaffolding
 - [x] Monorepo structure set up with `apps/frontend/`
 - [x] pnpm workspace configured
 
@@ -645,7 +645,7 @@ Create a wallet connection component using RainbowKit and display wallet informa
 ## Exercise 2.5: First Taste of Viem Utilities
 
 ### Objective
-Get a first practical taste of Viem by creating helper functions you'll use throughout the project. A deeper dive into the web3 library landscape and the full Viem/Wagmi API comes in Module 4, once you have real contracts to work with.
+Get a first practical taste of Viem by creating helper functions you'll use throughout the project. A deeper dive into the web3 library landscape and the full Viem/Wagmi API comes in Reading Blockchain Data, once you have real contracts to work with.
 
 ### Prerequisites
 - [x] Completed Exercise 2.4
@@ -670,7 +670,7 @@ RainbowKit  (UI components)
   Blockchain (via RPC provider)
 ```
 
-> You'll also encounter **ethers.js** in Module 3 when you set up Hardhat for smart contract development. Hardhat's tooling is built on ethers.js, while the frontend uses Viem/Wagmi. Module 4 explains this split in detail and covers the full Viem/Wagmi API. For now, just know the names.
+> You'll also encounter **ethers.js** in Smart Contract Development & Deployment when you set up Hardhat. Hardhat's tooling is built on ethers.js, while the frontend uses Viem/Wagmi. Reading Blockchain Data explains this split in detail and covers the full Viem/Wagmi API. For now, just know the names.
 
 #### Step 2: Create Viem Helper Functions
 Viem provides pure utility functions that work anywhere -- React components, scripts, tests, or plain TypeScript files. Create a helpers file you'll reuse throughout the project.
@@ -783,4 +783,4 @@ After completing this module, you should:
 - Display wallet information (address, balance, chain)
 - Understand provider configuration and transport selection
 - Have a first practical taste of Viem utility functions
-- Proceed to Module 3: Smart Contract Development & Deployment
+- Proceed to Smart Contract Development & Deployment

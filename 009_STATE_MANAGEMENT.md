@@ -1,4 +1,4 @@
-# Module 7: State Management & Data Fetching
+# State Management & Data Fetching
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -12,7 +12,7 @@
 Set up Zustand 4 for UI state management, separate from blockchain data.
 
 ### Prerequisites
-- [x] Completed Module 6
+- [x] Completed Advanced Contract Interactions
 - [x] Zustand installed
 - [x] Understanding of state management
 
@@ -82,7 +82,7 @@ Expand the scopes pattern for complex data relationships and targeted cache inva
 
 ### Prerequisites
 - [x] Completed Exercise 7.1
-- [x] Understanding of scopes pattern from Module 4
+- [x] Understanding of scopes pattern from Reading Blockchain Data
 
 ### Instructions
 
@@ -281,4 +281,4 @@ After completing this module, you should:
 - Know how to implement advanced scopes patterns
 - Be able to prevent UI flicker
 - Understand debounced invalidation
-- Proceed to Module 8: User Experience & Best Practices
+- Proceed to User Experience & Best Practices

@@ -2,6 +2,41 @@
 
 A comprehensive, progressive learning path for mastering DApp development.
 
+## What You're Building
+
+You're building **client-side only DApps** -- web applications that run entirely in the browser and talk directly to the blockchain. There is **no backend server**.
+
+```
+┌─────────────────────────────────────────────────────┐
+│                Traditional Web App                   │
+│                                                      │
+│   Browser  ──→  Your Server  ──→  Your Database     │
+│            ←──  (Express,    ←──  (PostgreSQL,      │
+│                  Next.js)         MongoDB)           │
+└─────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────┐
+│          DApp (what you're building)                  │
+│                                                      │
+│   Browser  ──────────────→  Blockchain               │
+│   (React)  ←──────────────  (Ethereum / Sepolia)    │
+│      │                          │                    │
+│      │  wallet = your auth      │  smart contracts   │
+│      │  RPC = your API          │  = your backend    │
+│      │  static hosting = done   │  = your database   │
+└─────────────────────────────────────────────────────┘
+```
+
+**Key implications of this architecture:**
+- **No Express, no Next.js, no server-side API routes, no SSR.** The output is a static folder of HTML/JS/CSS that you upload to any static host (Vercel, Netlify, IPFS).
+- **Authentication is wallet-based.** The user's wallet (MetaMask, etc.) signs transactions. There are no usernames, passwords, or sessions.
+- **The blockchain is your database.** Smart contracts store and enforce your application logic. Reading data is free; writing costs gas.
+- **The RPC provider is your API.** Your frontend talks to the blockchain through an RPC provider (Alchemy) -- think of it as a read/write API to Ethereum.
+
+This is why the monorepo has only two parts: `apps/frontend` (the static React app) and `packages/contracts` (the Solidity contracts + Hardhat tooling). No `apps/api`, no `apps/server`.
+
+---
+
 ## Overview
 
 This repository contains a structured learning path designed to get an introduction to DApp development. The curriculum is based on **production-ready DApp setup guides** and modern web3 tooling including:
@@ -86,15 +121,15 @@ learningdappdevelopment/
 ├── 001_README.md                       # Start here! Main entry point and overview
 ├── 002_DAPP_LEARNING_PATH.md           # Complete curriculum overview with all 9 modules
 │
-├── 003_ENVIRONMENT_SETUP.md            # Module 1: Environment Setup & Project Scaffolding
-├── 004_WEB3_WALLET_INTEGRATION.md      # Module 2: Web3 Fundamentals & Wallet Integration
-├── 005_SMART_CONTRACT_DEV.md           # Module 3: Smart Contract Development & Deployment
-├── 006_READING_BLOCKCHAIN.md           # Module 4: Reading Blockchain Data
-├── 007_WRITING_TRANSACTIONS.md         # Module 5: Writing to Blockchain (Transactions)
-├── 008_ADVANCED_INTERACTIONS.md        # Module 6: Advanced Contract Interactions
-├── 009_STATE_MANAGEMENT.md             # Module 7: State Management & Data Fetching
-├── 010_UX_BEST_PRACTICES.md            # Module 8: User Experience & Best Practices
-├── 011_PRODUCTION_READINESS.md         # Module 9: Advanced Topics & Production Readiness
+├── 003_ENVIRONMENT_SETUP.md            # Environment Setup & Project Scaffolding
+├── 004_WEB3_WALLET_INTEGRATION.md      # Web3 Fundamentals & Wallet Integration
+├── 005_SMART_CONTRACT_DEV.md           # Smart Contract Development & Deployment
+├── 006_READING_BLOCKCHAIN.md           # Reading Blockchain Data
+├── 007_WRITING_TRANSACTIONS.md         # Writing to Blockchain (Transactions)
+├── 008_ADVANCED_INTERACTIONS.md        # Advanced Contract Interactions
+├── 009_STATE_MANAGEMENT.md             # State Management & Data Fetching
+├── 010_UX_BEST_PRACTICES.md            # User Experience & Best Practices
+├── 011_PRODUCTION_READINESS.md         # Advanced Topics & Production Readiness
 │
 └── 012_QUICK_REFERENCE.md              # Quick lookup guide (use while working)
 ```
@@ -111,7 +146,7 @@ dapp_setup_guides/
 ### Understanding the Numbering
 
 - **001-002**: Core learning materials (README and Learning Path overview)
-- **003-011**: Sequential module exercises (follow in order: Module 1 → Module 2 → ... → Module 9)
+- **003-011**: Sequential module exercises (follow in order)
 - **012**: Quick Reference (use anytime as a lookup guide)
 - **dapp_setup_guides/**: Authoritative setup guides (referenced throughout exercises)
 
@@ -129,15 +164,15 @@ dapp_setup_guides/
 
 ### Learning Path
 - **[002_DAPP_LEARNING_PATH.md](./002_DAPP_LEARNING_PATH.md)** - Complete learning path with all modules, exercises, and concepts
-- **[003_ENVIRONMENT_SETUP.md](./003_ENVIRONMENT_SETUP.md)** - Module 1: Environment Setup & Project Scaffolding
-- **[004_WEB3_WALLET_INTEGRATION.md](./004_WEB3_WALLET_INTEGRATION.md)** - Module 2: Web3 Fundamentals & Wallet Integration
-- **[005_SMART_CONTRACT_DEV.md](./005_SMART_CONTRACT_DEV.md)** - Module 3: Smart Contract Development & Deployment
-- **[006_READING_BLOCKCHAIN.md](./006_READING_BLOCKCHAIN.md)** - Module 4: Reading Blockchain Data
-- **[007_WRITING_TRANSACTIONS.md](./007_WRITING_TRANSACTIONS.md)** - Module 5: Writing to Blockchain (Transactions)
-- **[008_ADVANCED_INTERACTIONS.md](./008_ADVANCED_INTERACTIONS.md)** - Module 6: Advanced Contract Interactions
-- **[009_STATE_MANAGEMENT.md](./009_STATE_MANAGEMENT.md)** - Module 7: State Management & Data Fetching
-- **[010_UX_BEST_PRACTICES.md](./010_UX_BEST_PRACTICES.md)** - Module 8: User Experience & Best Practices
-- **[011_PRODUCTION_READINESS.md](./011_PRODUCTION_READINESS.md)** - Module 9: Advanced Topics & Production Readiness
+- **[003_ENVIRONMENT_SETUP.md](./003_ENVIRONMENT_SETUP.md)** - Environment Setup & Project Scaffolding
+- **[004_WEB3_WALLET_INTEGRATION.md](./004_WEB3_WALLET_INTEGRATION.md)** - Web3 Fundamentals & Wallet Integration
+- **[005_SMART_CONTRACT_DEV.md](./005_SMART_CONTRACT_DEV.md)** - Smart Contract Development & Deployment
+- **[006_READING_BLOCKCHAIN.md](./006_READING_BLOCKCHAIN.md)** - Reading Blockchain Data
+- **[007_WRITING_TRANSACTIONS.md](./007_WRITING_TRANSACTIONS.md)** - Writing to Blockchain (Transactions)
+- **[008_ADVANCED_INTERACTIONS.md](./008_ADVANCED_INTERACTIONS.md)** - Advanced Contract Interactions
+- **[009_STATE_MANAGEMENT.md](./009_STATE_MANAGEMENT.md)** - State Management & Data Fetching
+- **[010_UX_BEST_PRACTICES.md](./010_UX_BEST_PRACTICES.md)** - User Experience & Best Practices
+- **[011_PRODUCTION_READINESS.md](./011_PRODUCTION_READINESS.md)** - Advanced Topics & Production Readiness
 - **[012_QUICK_REFERENCE.md](./012_QUICK_REFERENCE.md)** - Quick reference guide for common tasks
 
 ### Setup Guides (Single Source of Truth)
@@ -151,8 +186,8 @@ dapp_setup_guides/
 
 ## Getting Started
 
-1. **Start with Module 1**: Read `002_DAPP_LEARNING_PATH.md` to understand the full curriculum
-2. **Complete Module 1 Exercises**: Follow `003_ENVIRONMENT_SETUP.md` step by step
+1. **Start here**: Read `002_DAPP_LEARNING_PATH.md` to understand the full curriculum
+2. **Begin with Environment Setup**: Follow `003_ENVIRONMENT_SETUP.md` step by step
 3. **Progress Sequentially**: Complete each module before moving to the next
 4. **Ask Questions**: Don't hesitate to ask for help when stuck
 5. **Practice**: Build small projects between modules to reinforce learning
@@ -176,6 +211,7 @@ Before starting, make sure you have:
 
 By the end of this learning path, you will be able to:
 
+- Understand the client-side DApp architecture (no backend, blockchain as database, wallet as auth)
 - Set up a complete DApp development environment
 - Write, test, and deploy Solidity smart contracts
 - Use OpenZeppelin libraries and upgradeable patterns
@@ -185,7 +221,7 @@ By the end of this learning path, you will be able to:
 - Handle complex contract interactions
 - Manage application state effectively
 - Create production-ready DApps with excellent UX
-- Deploy and monitor DApps in production
+- Build and deploy to static hosting (Vercel, Netlify, IPFS)
 
 ## Self-Assessment
 

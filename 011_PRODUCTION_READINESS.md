@@ -1,4 +1,4 @@
-# Module 9: Advanced Topics & Production Readiness
+# Advanced Topics & Production Readiness
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -12,7 +12,7 @@
 Implement build versioning system for debugging and support.
 
 ### Prerequisites
-- [x] Completed Module 8
+- [x] Completed User Experience & Best Practices
 - [x] Vite configured
 
 ### Instructions
@@ -148,7 +148,7 @@ Set up testing for both frontend and smart contracts.
    ```
 
 #### Step 3: Verify Contract Tests
-1. Ensure contract tests from Module 3 still pass:
+1. Ensure contract tests from Smart Contract Development still pass:
    ```bash
    cd packages/contracts
    pnpm test

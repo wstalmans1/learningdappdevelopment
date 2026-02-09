@@ -1,4 +1,4 @@
-# Module 5: Writing to Blockchain (Transactions)
+# Writing to Blockchain (Transactions)
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -12,7 +12,7 @@
 Implement a transaction overlay system for production-grade UX that provides clear feedback during blockchain transactions.
 
 ### Prerequisites
-- [x] Completed Module 4
+- [x] Completed Reading Blockchain Data
 - [x] Understanding of transaction lifecycle
 - [x] Zustand installed
 
@@ -636,4 +636,4 @@ After completing this module, you should:
 - Know how to estimate gas costs
 - Handle transaction errors gracefully
 - Invalidate cache after transactions
-- Proceed to Module 6: Advanced Contract Interactions
+- Proceed to Advanced Contract Interactions

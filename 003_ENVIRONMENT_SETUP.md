@@ -1,4 +1,4 @@
-# Module 1: Environment Setup & Project Scaffolding
+# Environment Setup & Project Scaffolding
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -243,6 +243,28 @@ Create a new React project with Vite, TypeScript, and React Router DOM 6, then s
 
 > **📖 Reference**: Follow the setup guides in `dapp_setup_guides/002_setup_instructions_and_best_practices.md` for the complete setup process.
 
+### Understanding the Architecture Before You Build
+
+Before creating any files, it's important to understand **what kind of application** you're building and how it differs from a traditional web app.
+
+**A DApp is client-side only.** There is no backend server.
+
+| Traditional Web App | DApp (what you're building) |
+|---------------------|---------------------------|
+| Browser talks to **your server** (Express, Next.js) | Browser talks **directly to the blockchain** via RPC |
+| Server talks to **your database** (PostgreSQL, MongoDB) | **Smart contracts** on the blockchain store data and enforce logic |
+| Auth via **username/password** + sessions/JWT | Auth via **wallet signature** (MetaMask, etc.) |
+| Deploy to **app server** (AWS, Heroku, Docker) | Deploy to **static hosting** (Vercel, Netlify, IPFS) -- just HTML/JS/CSS |
+| Backend code runs on your server | "Backend" code runs on the blockchain (Solidity smart contracts) |
+
+**This is why the monorepo has only two parts:**
+- `apps/frontend/` -- the React SPA (the *only* runtime code)
+- `packages/contracts/` -- Solidity contracts + Hardhat tooling (a *development-time* tool, not a running server)
+
+There is no `apps/api/`, no `apps/server/`, no serverless functions. The build output of `apps/frontend/` is a static folder (`dist/`) that you upload to any hosting platform. The `_redirects` file you'll create later ensures client-side routing works on these static hosts.
+
+> Keep this architecture in mind as you set up the project structure below. Every folder, config file, and tool choice follows from this "client-side only" decision.
+
 ### Instructions
 
 #### Step 1: Create Monorepo Root
@@ -375,7 +397,7 @@ Create a new React project with Vite, TypeScript, and React Router DOM 6, then s
    │       ├── tsconfig.json
    │       └── package.json
    ├── packages/              # (Will be created in later exercises)
-   │   └── contracts/        # Smart contracts (Module 5+)
+   │   └── contracts/        # Smart contracts (later modules)
    ├── pnpm-workspace.yaml    # Workspace configuration
    └── package.json           # Root workspace config
    ```

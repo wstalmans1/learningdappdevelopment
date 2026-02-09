@@ -1,4 +1,4 @@
-# Module 8: User Experience & Best Practices
+# User Experience & Best Practices
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -12,7 +12,7 @@
 Implement connection health monitoring to track RPC provider health and show status to users.
 
 ### Prerequisites
-- [x] Completed Module 7
+- [x] Completed State Management & Data Fetching
 - [x] Zustand installed
 - [x] Understanding of RPC connections
 
@@ -440,4 +440,4 @@ After completing this module, you should:
 - Know how to implement loading states
 - Create responsive designs
 - Follow web3 UX best practices
-- Proceed to Module 9: Advanced Topics & Production Readiness
+- Proceed to Advanced Topics & Production Readiness

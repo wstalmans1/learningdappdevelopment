@@ -17,19 +17,21 @@ This learning path is structured in **9 progressive modules**, each building upo
 - **Key concepts to master**
 - **Checkpoint assessment**
 
+> **Architecture note:** Every DApp you build in this curriculum is **client-side only**. There is no backend server, no SSR, no server-side API. The React frontend runs entirely in the browser, talks to the blockchain via an RPC provider (Alchemy), and uses the user's wallet for authentication. The build output is a static folder you deploy to any static host. See `001_README.md` for the full architecture diagram.
+
 ---
 
-## Module 1: Environment Setup & Project Scaffolding
+## Environment Setup & Project Scaffolding
 
 **Difficulty:** Beginner
 
 ### Learning Objectives
+- Understand the client-side DApp architecture: no backend server, blockchain = database, wallet = auth
 - Set up a modern development environment for DApp development
 - Understand the toolchain: Node.js, npm/yarn/pnpm, Git
 - Initialize a React project with Vite and TypeScript
 - Set up React Router DOM 6 with BrowserRouter
 - Configure ESLint, Prettier, and basic project structure
-- Understand the difference between traditional web apps and DApps
 
 ### Prerequisites
 - Basic knowledge of JavaScript/TypeScript
@@ -83,7 +85,7 @@ This learning path is structured in **9 progressive modules**, each building upo
    │       │   └── main.tsx
    │       └── public/
    │           └── _redirects  # For static hosting
-   ├── packages/              # (Created in Module 3)
+   ├── packages/              # (Created in Smart Contract Development)
    │   └── contracts/         # Hardhat 2 + Solidity
    ├── pnpm-workspace.yaml
    └── package.json
@@ -101,14 +103,16 @@ This learning path is structured in **9 progressive modules**, each building upo
 6. Create a `README.md` with project setup instructions
 
 ### Key Concepts
+- **Client-side only architecture**: No backend server -- the blockchain is your backend, the wallet is your auth, static hosting is your deployment
 - **React Router DOM 6**: Client-side routing with BrowserRouter (HTML5 history API)
-- **Static Hosting**: Using `_redirects` file for IPFS/Vercel/Netlify compatibility
+- **Static Hosting**: Using `_redirects` file for IPFS/Vercel/Netlify compatibility (because the output is just HTML/JS/CSS)
 - **Vite**: Fast build tool and development server
 - **TypeScript**: Type safety in DApp development
 - **Package Management**: Understanding dependencies vs devDependencies
 - **Environment Variables**: `.env` for configuration
 
 ### Checkpoint
+- Can explain why a DApp doesn't need a traditional backend server
 - Can initialize a React + Vite project from scratch
 - Understands React Router DOM 6 setup with BrowserRouter
 - Has configured `_redirects` for static hosting
@@ -117,7 +121,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Module 2: Web3 Fundamentals & Wallet Integration
+## Web3 Fundamentals & Wallet Integration
 
 **Difficulty:** Beginner
 
@@ -130,7 +134,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Handle wallet connection states
 
 ### Prerequisites
-- Completed Module 1
+- Completed Environment Setup & Project Scaffolding
 - Basic understanding of blockchain concepts
 
 ### Exercises
@@ -201,7 +205,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 2. Create Viem helper functions (`formatAddress`, `formatWeiToEther`, etc.)
 3. Use helpers in WalletInfo component
 
-> **Note**: A deep dive into the full web3 library landscape (ethers.js vs Viem vs web3.js, when to use what) comes in Module 4, once you have real contracts and Hardhat experience to give it context.
+> **Note**: A deep dive into the full web3 library landscape (ethers.js vs Viem vs web3.js, when to use what) comes in Reading Blockchain Data, once you have real contracts and Hardhat experience to give it context.
 
 ### Key Concepts
 - **Viem → Wagmi → RainbowKit**: Three layers from low-level to UI
@@ -220,7 +224,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Module 3: Smart Contract Development & Deployment
+## Smart Contract Development & Deployment
 
 **Difficulty:** Beginner-Intermediate
 
@@ -235,7 +239,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Verify contracts on Sourcify and Blockscout
 
 ### Prerequisites
-- Completed Module 2
+- Completed Web3 Fundamentals & Wallet Integration
 - Basic programming knowledge
 
 ### Exercises
@@ -307,7 +311,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Module 4: Reading Blockchain Data
+## Reading Blockchain Data
 
 **Difficulty:** Intermediate
 
@@ -320,7 +324,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Understand the difference between read and write operations
 
 ### Prerequisites
-- Completed Module 3 (contract deployed, ABI shared with frontend, used ethers.js in tests)
+- Completed Smart Contract Development & Deployment (contract deployed, ABI shared with frontend, used ethers.js in tests)
 
 ### Exercises
 
@@ -336,7 +340,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 2. Create helper functions for targeted invalidation
 
 #### Exercise 4.3: Read Simple Contract State
-1. Use `useReadContract` with contract info from Module 3
+1. Use `useReadContract` with contract info from Smart Contract Development
 2. Handle loading and error states properly
 3. Use scope keys for cache management
 
@@ -375,7 +379,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Module 5: Writing to Blockchain (Transactions)
+## Writing to Blockchain (Transactions)
 
 **Difficulty:** Intermediate
 
@@ -388,7 +392,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Handle user rejection of transactions
 
 ### Prerequisites
-- Completed Module 4
+- Completed Reading Blockchain Data
 - Understanding of gas and transaction fees
 
 ### Exercises
@@ -428,7 +432,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Module 6: Advanced Contract Interactions
+## Advanced Contract Interactions
 
 **Difficulty:** Intermediate-Advanced
 
@@ -438,7 +442,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Set up a production real-time event system (separate WebSocket client)
 
 ### Prerequisites
-- Completed Module 5
+- Completed Writing to Blockchain (Transactions)
 - Understanding of ERC standards
 
 ### Exercises
@@ -467,7 +471,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Module 7: State Management & Data Fetching
+## State Management & Data Fetching
 
 **Difficulty:** Intermediate
 
@@ -479,7 +483,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Prevent UI flicker with proper cache configuration
 
 ### Prerequisites
-- Completed Module 6
+- Completed Advanced Contract Interactions
 - Understanding of React state management
 
 ### Exercises
@@ -511,7 +515,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Module 8: User Experience & Best Practices
+## User Experience & Best Practices
 
 **Difficulty:** Intermediate-Advanced
 
@@ -522,7 +526,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Create responsive designs
 
 ### Prerequisites
-- Completed Module 7
+- Completed State Management & Data Fetching
 - Basic understanding of UI/UX principles
 
 ### Exercises
@@ -559,7 +563,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Module 9: Advanced Topics & Production Readiness
+## Advanced Topics & Production Readiness
 
 **Difficulty:** Advanced
 
@@ -570,7 +574,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Understand production optimization (manual chunks, code splitting)
 
 ### Prerequisites
-- Completed Module 8
+- Completed User Experience & Best Practices
 - Understanding of production deployment
 
 ### Exercises
@@ -582,7 +586,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 #### Exercise 9.2: Testing Strategy
 1. Set up Vitest for frontend testing
 2. Write frontend tests
-3. Verify contract tests from Module 3
+3. Verify contract tests from Smart Contract Development
 
 #### Exercise 9.3: Production Build and Deployment
 1. Configure manual chunks for production build

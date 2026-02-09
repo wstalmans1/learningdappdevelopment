@@ -1,4 +1,4 @@
-# Module 6: Advanced Contract Interactions
+# Advanced Contract Interactions
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -12,8 +12,8 @@
 Implement ERC-20 token transfer with the approval pattern (two-step transaction).
 
 ### Prerequisites
-- [x] Completed Module 5
-- [x] Token contract deployed (from Module 3)
+- [x] Completed Writing to Blockchain (Transactions)
+- [x] Token contract deployed (from Smart Contract Development & Deployment)
 - [x] Understanding of ERC-20 standard
 
 ### Instructions
@@ -324,4 +324,4 @@ After completing this module, you should:
 - Be able to implement approval patterns
 - Understand real-time event systems
 - Know how to use WebSocket for event watching
-- Proceed to Module 7: State Management & Data Fetching
+- Proceed to State Management & Data Fetching

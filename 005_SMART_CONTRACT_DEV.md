@@ -1,4 +1,4 @@
-# Module 3: Smart Contract Development & Deployment
+# Smart Contract Development & Deployment
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -12,7 +12,7 @@
 Learn the core concepts of the Solidity programming language before writing your first contract.
 
 ### Prerequisites
-- [x] Completed Module 2
+- [x] Completed Web3 Fundamentals & Wallet Integration
 - [x] Monorepo structure set up (`apps/frontend` exists)
 - [x] Basic programming knowledge (variables, functions, control flow)
 
@@ -401,7 +401,7 @@ Write comprehensive tests for your SimpleStorage contract using Hardhat's testin
 
 > ### A Note on ethers.js vs Viem
 >
-> You're about to write `const { ethers } = require("hardhat")`. That's **ethers.js** -- a *different* Ethereum JavaScript library than the **Viem** you installed on the frontend in Module 2. Why two libraries?
+> You're about to write `const { ethers } = require("hardhat")`. That's **ethers.js** -- a *different* Ethereum JavaScript library than the **Viem** you installed on the frontend in Web3 Fundamentals & Wallet Integration. Why two libraries?
 >
 > | Context | Library | Why |
 > |---------|---------|-----|
@@ -418,7 +418,7 @@ Write comprehensive tests for your SimpleStorage contract using Hardhat's testin
 > | Read contract | `contract.storedValue()` | `useReadContract({ ... })` (via Wagmi) |
 > | Write contract | `contract.setValue(42)` | `useWriteContract()` (via Wagmi) |
 >
-> You don't need to memorise both APIs right now. Just be aware that when you see `ethers` in this module, it's the *Hardhat* library, and when you go back to the frontend in Module 4, you'll switch to Viem/Wagmi. Module 4 covers the full library landscape in depth.
+> You don't need to memorise both APIs right now. Just be aware that when you see `ethers` in this module, it's the *Hardhat* library, and when you go back to the frontend in Reading Blockchain Data, you'll switch to Viem/Wagmi. That module covers the full library landscape in depth.
 
 ### Instructions
 
@@ -679,7 +679,7 @@ Deploy the SimpleStorage contract to the Sepolia testnet and verify it works on 
 
 ### Prerequisites
 - [x] Completed Exercise 3.5
-- [x] Alchemy API key configured (from Module 2)
+- [x] Alchemy API key configured (from Web3 Fundamentals & Wallet Integration)
 - [x] Sepolia testnet ETH (from a faucet)
 
 ### Instructions
@@ -727,7 +727,7 @@ Deploy the SimpleStorage contract to the Sepolia testnet and verify it works on 
    pnpm deploy:sepolia
    ```
 
-2. Save the deployed contract address -- you will use it in Module 4 and beyond
+2. Save the deployed contract address -- you will use it in Reading Blockchain Data and beyond
 
 3. View your contract on a block explorer:
    - [Sepolia Etherscan](https://sepolia.etherscan.io) -- paste the contract address
@@ -1184,4 +1184,4 @@ After completing this module, you should:
 - Understand upgradeable contract patterns
 - Know how to share ABIs with the frontend
 - Know how to verify contracts (Sourcify + Blockscout)
-- Proceed to Module 4: Reading Blockchain Data
+- Proceed to Reading Blockchain Data

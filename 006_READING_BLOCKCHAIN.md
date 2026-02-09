@@ -1,4 +1,4 @@
-# Module 4: Reading Blockchain Data
+# Reading Blockchain Data
 
 > **📖 Important**: This module follows the setup guides in `dapp_setup_guides/`. For the complete, authoritative setup instructions, refer to:
 > - **[001_scaffolding_specs.md](./dapp_setup_guides/001_scaffolding_specs.md)** - Tech stack, architecture, and patterns
@@ -12,8 +12,8 @@
 Before you start reading blockchain data from the frontend, take a step back and understand the full picture of the JavaScript/TypeScript libraries you're using, why the project uses *different* libraries in different contexts, and how they relate to each other. This is the foundation you need to debug problems and read documentation effectively.
 
 ### Prerequisites
-- [x] Completed Module 3 (you've already used ethers.js in Hardhat tests and scripts)
-- [x] Completed Module 2 (you've already used Wagmi hooks and Viem utilities)
+- [x] Completed Smart Contract Development & Deployment (you've already used ethers.js in Hardhat tests and scripts)
+- [x] Completed Web3 Fundamentals & Wallet Integration (you've already used Wagmi hooks and Viem utilities)
 
 ### Instructions
 
@@ -31,7 +31,7 @@ There are three libraries that dominate the Ethereum JavaScript ecosystem. You n
 
 #### Step 2: Why This Project Uses Two Libraries
 
-You already noticed this in Module 3:
+You already noticed this in Smart Contract Development & Deployment:
 
 | Layer | Library | Reason |
 |-------|---------|--------|
@@ -45,14 +45,17 @@ This is a **common pattern** in production DApps -- it's not a mistake or a comp
 
 #### Step 3: The Full Stack Picture
 
+Remember from Environment Setup: **this DApp is client-side only**. There is no backend server. The diagram below shows everything that exists at runtime -- it's just the browser and the blockchain:
+
 ```
 ┌──────────────────────────────────────────────────────┐
 │                     Your DApp                         │
 │                                                       │
 │  ┌─────────────────────┐  ┌────────────────────────┐ │
 │  │  packages/contracts  │  │    apps/frontend        │ │
+│  │  (dev-time only!)    │  │    (the ONLY runtime)   │ │
 │  │                      │  │                         │ │
-│  │  Hardhat + ethers.js │  │  React                  │ │
+│  │  Hardhat + ethers.js │  │  React (static SPA)     │ │
 │  │  • Compile Solidity  │  │    ↕                    │ │
 │  │  • Run tests         │  │  Wagmi hooks            │ │
 │  │  • Deploy scripts    │  │  (useReadContract, etc.)│ │
@@ -62,14 +65,20 @@ This is a **common pattern** in production DApps -- it's not a mistake or a comp
 │  │                      │  │   formatting, encoding) │ │
 │  └─────────────────────┘  └────────────────────────┘ │
 │                                     ↕                 │
-│                              RPC Provider             │
-│                         (Alchemy / Infura)            │
-│                                     ↕                 │
+│           No server here!    RPC Provider             │
+│           No Express, no     (Alchemy / Infura)       │
+│           Next.js, no SSR.          ↕                 │
 │                              Blockchain               │
+│                              (= your "backend"        │
+│                               + database)             │
 └──────────────────────────────────────────────────────┘
 ```
 
-The **bridge** between the two sides is the ABI and contract address you exported in Module 3, Exercise 3.7. The frontend never touches ethers.js; the contracts side never touches Viem.
+Notice two things:
+1. `packages/contracts` is **development-time only** -- it compiles and deploys your Solidity, but it doesn't run in production. The only thing it produces for the frontend is the ABI + contract address (Smart Contract Development, Exercise 3.7).
+2. `apps/frontend` is a **static SPA** -- it builds to a `dist/` folder of HTML/JS/CSS that gets uploaded to a static host (Vercel, Netlify, IPFS). No server process keeps running.
+
+The frontend never touches ethers.js; the contracts side never touches Viem.
 
 #### Step 4: Viem -- Deep Dive
 
@@ -92,7 +101,7 @@ Viem has three layers you'll use in this project:
    - `erc721Abi` -- complete ERC-721 interface
    - These give you full type inference: the compiler knows exactly what functions exist and what types they return
 
-> In React components, you typically **don't create Viem clients directly**. Instead, Wagmi creates them for you based on your config (from Module 2, Exercise 2.3). You use Wagmi hooks, and they use the Viem client under the hood. You'll only create Viem clients directly for non-React contexts (utility scripts, background event watchers).
+> In React components, you typically **don't create Viem clients directly**. Instead, Wagmi creates them for you based on your config (from Web3 Wallet Integration, Exercise 2.3). You use Wagmi hooks, and they use the Viem client under the hood. You'll only create Viem clients directly for non-React contexts (utility scripts, background event watchers).
 
 #### Step 5: Wagmi -- Deep Dive
 
@@ -134,7 +143,7 @@ Use this mental model going forward:
 
 "I need a pre-built ABI?"
     → Import from Viem (erc20Abi, erc721Abi)
-      OR import the custom ABI you extracted in Module 3.
+      OR import the custom ABI you extracted in Smart Contract Development.
 ```
 
 ### Key Takeaways
@@ -143,7 +152,7 @@ Use this mental model going forward:
 2. This project uses ethers.js *only* in Hardhat (contracts), and Viem/Wagmi *only* on the frontend -- this is standard practice
 3. **Viem utilities** (formatting, parsing, validation) are pure functions and work anywhere
 4. **Wagmi hooks** add React state, caching, and re-renders on top of Viem
-5. You already used Viem utilities in Module 2 (Exercise 2.5) and ethers.js in Module 3 (Exercises 3.4-3.6) -- now you understand *why*
+5. You already used Viem utilities in Web3 Wallet Integration (Exercise 2.5) and ethers.js in Smart Contract Development (Exercises 3.4-3.6) -- now you understand *why*
 
 ### Submission Checklist
 
@@ -236,17 +245,17 @@ Create a centralized scopes system for TanStack Query cache invalidation to prev
 ## Exercise 4.3: Read Simple Contract State
 
 ### Objective
-Read data from the SimpleStorage contract you deployed in Module 3 using Wagmi hooks with proper scopes and error handling.
+Read data from the SimpleStorage contract you deployed in Smart Contract Development using Wagmi hooks with proper scopes and error handling.
 
 ### Prerequisites
 - [x] Completed Exercise 4.2
-- [x] SimpleStorage deployed (from Module 3) and address available
-- [x] Contract ABI shared with frontend (from Module 3, Exercise 3.7)
+- [x] SimpleStorage deployed (from Smart Contract Development) and address available
+- [x] Contract ABI shared with frontend (from Smart Contract Development, Exercise 3.7)
 
 ### Instructions
 
 #### Step 1: Import Contract Info
-1. Import from the contracts file you created in Module 3:
+1. Import from the contracts file you created in Smart Contract Development:
    ```typescript
    import { SIMPLE_STORAGE_ADDRESS, SIMPLE_STORAGE_ABI } from '@/contracts/SimpleStorage';
    ```
@@ -302,7 +311,7 @@ Read data from the SimpleStorage contract you deployed in Module 3 using Wagmi h
    ```
 
 **Expected Outcome:**
-- Component reads contract state from the contract deployed in Module 3
+- Component reads contract state from the contract deployed in Smart Contract Development
 - Uses scope keys for cache management
 - Handles loading and error states
 
@@ -330,7 +339,7 @@ Read data from the SimpleStorage contract you deployed in Module 3 using Wagmi h
 ### Submission Checklist
 
 - [ ] Read component created
-- [ ] Uses contract info from Module 3
+- [ ] Uses contract info from Smart Contract Development
 - [ ] Uses scope keys
 - [ ] Handles loading states
 - [ ] Handles error states
@@ -688,4 +697,4 @@ After completing this module, you should:
 - Be able to read ERC-20 token data
 - Understand how to listen to contract events
 - Handle loading and error states properly
-- Proceed to Module 5: Writing to Blockchain (Transactions)
+- Proceed to Writing to Blockchain (Transactions)
