@@ -553,7 +553,9 @@ Write comprehensive tests for your SimpleStorage contract using Hardhat's testin
 
 ---
 
-## Exercise 3.5: Deploy to Local Hardhat Network
+## Exercise 3.5: Deploy to Local Hardhat Network (Optional)
+
+> **This exercise is optional.** Deploying to a local Hardhat node is useful for rapid iteration and debugging, but you can skip straight to Exercise 3.6 (Deploy to Sepolia Testnet) if you prefer working on a real testnet from the start. The deployment script you create in Step 1 below is reused in Exercise 3.6, so **do complete Step 1** even if you skip the local node steps.
 
 ### Objective
 Deploy your contract to a local Hardhat network and interact with it, establishing the local development workflow.

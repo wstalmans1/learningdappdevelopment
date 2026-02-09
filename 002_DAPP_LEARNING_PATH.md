@@ -233,7 +233,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Set up Hardhat 2 for contract compilation, testing, and deployment
 - Write smart contracts with NatSpec documentation
 - Write comprehensive contract tests
-- Deploy to local Hardhat network and Sepolia testnet
+- Deploy to Sepolia testnet (and optionally to a local Hardhat network)
 - Share ABIs with the frontend
 - Use OpenZeppelin contract libraries and upgradeable patterns
 - Verify contracts on Sourcify and Blockscout
@@ -265,8 +265,8 @@ This learning path is structured in **9 progressive modules**, each building upo
 2. Test deployment, state changes, events, edge cases
 3. Understand `beforeEach`, `connect()`, `.to.emit()`
 
-#### Exercise 3.5: Deploy to Local Hardhat Network
-1. Create deployment script
+#### Exercise 3.5: Deploy to Local Hardhat Network (Optional)
+1. Create deployment script (reused in Exercise 3.6)
 2. Run local Hardhat node
 3. Deploy and interact via Hardhat console
 
@@ -294,7 +294,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 ### Key Concepts
 - **Solidity**: Types, functions, events, modifiers, inheritance
 - **NatSpec**: Documentation standard for Solidity contracts
-- **Hardhat 2**: Compilation, testing, deployment, local network
+- **Hardhat 2**: Compilation, testing, deployment
 - **Testing**: Chai assertions, event testing, account management
 - **ABI**: How the frontend communicates with contracts
 - **OpenZeppelin**: Audited contract libraries (ERC-20, Ownable, etc.)
@@ -304,7 +304,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 ### Checkpoint
 - Can write Solidity contracts with NatSpec
 - Can test contracts comprehensively
-- Can deploy to local and testnet
+- Can deploy to Sepolia testnet (and optionally to a local node)
 - Understands OpenZeppelin inheritance
 - Knows how to share ABIs with frontend
 - Can verify contracts on Sourcify/Blockscout
