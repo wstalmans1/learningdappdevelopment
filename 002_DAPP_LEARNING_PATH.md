@@ -606,19 +606,6 @@ This learning path is structured in **9 progressive modules**, each building upo
 
 ---
 
-## Capstone Project Ideas
-
-After completing all modules, choose one of these projects to demonstrate mastery:
-
-1. **NFT Marketplace**: Full-featured marketplace with buying, selling, bidding
-2. **DeFi Dashboard**: Portfolio tracker with multiple protocols
-3. **DAO Voting Platform**: Governance interface with proposals and voting
-4. **Token Launchpad**: Platform for launching new tokens
-5. **Multi-sig Wallet Interface**: Interface for managing multi-signature wallets
-6. **Cross-chain Bridge UI**: Interface for bridging assets between chains
-
----
-
 ## Resources & Further Learning
 
 ### Documentation
