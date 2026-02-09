@@ -6,13 +6,161 @@
 >
 > The setup guides are the **single source of truth** for scaffolding and architecture decisions.
 
-## Exercise 4.1: Set Up Scopes Pattern for Cache Management
+## Exercise 4.1: Understanding the Web3 Library Landscape
+
+### Objective
+Before you start reading blockchain data from the frontend, take a step back and understand the full picture of the JavaScript/TypeScript libraries you're using, why the project uses *different* libraries in different contexts, and how they relate to each other. This is the foundation you need to debug problems and read documentation effectively.
+
+### Prerequisites
+- [x] Completed Module 3 (you've already used ethers.js in Hardhat tests and scripts)
+- [x] Completed Module 2 (you've already used Wagmi hooks and Viem utilities)
+
+### Instructions
+
+#### Step 1: The Three Major Ethereum JS Libraries
+
+There are three libraries that dominate the Ethereum JavaScript ecosystem. You need to know they exist, what they're good at, and which one you'll use where.
+
+| Library | Philosophy | Bundle size | TypeScript | Primary use case |
+|---------|-----------|-------------|-----------|-----------------|
+| **web3.js** | The original. Broad feature set, verbose API. | ~590 kB min | Retrofitted (v4 improved) | Legacy projects, some tooling |
+| **ethers.js** (v6) | Clean, well-documented. De-facto standard for Node-side tooling. | ~120 kB min | Good (v6 much better) | Hardhat, scripts, server-side, any non-React context |
+| **Viem** (v2) | TypeScript-first, modular, tree-shakeable. Newest of the three. | ~35 kB min (tree-shaken) | Excellent (designed for it) | Modern frontends, production DApps |
+
+> All three can do the same things -- read contracts, send transactions, format values, interact with wallets. They differ in API design, bundle size, type safety, and ecosystem integrations.
+
+#### Step 2: Why This Project Uses Two Libraries
+
+You already noticed this in Module 3:
+
+| Layer | Library | Reason |
+|-------|---------|--------|
+| **Hardhat** (contracts, tests, deploy scripts) | **ethers.js** | Hardhat's plugin ecosystem is built around ethers. `hardhat-ethers`, `hardhat-upgrades`, and most Hardhat tutorials assume ethers. Switching would mean losing that tooling. |
+| **React frontend** | **Viem + Wagmi** | Viem is TypeScript-first and tree-shakeable, giving much smaller production bundles. Wagmi wraps Viem in React hooks with built-in caching (via TanStack Query), automatic re-renders, and wallet management. |
+
+This is a **common pattern** in production DApps -- it's not a mistake or a compromise. The contract toolchain and the frontend have different needs:
+
+- **Contract toolchain** needs: rich plugin ecosystem, mature testing utilities, extensive documentation for Solidity patterns.
+- **Frontend** needs: small bundle, excellent TypeScript inference, React integration, automatic cache management.
+
+#### Step 3: The Full Stack Picture
+
+```
+┌──────────────────────────────────────────────────────┐
+│                     Your DApp                         │
+│                                                       │
+│  ┌─────────────────────┐  ┌────────────────────────┐ │
+│  │  packages/contracts  │  │    apps/frontend        │ │
+│  │                      │  │                         │ │
+│  │  Hardhat + ethers.js │  │  React                  │ │
+│  │  • Compile Solidity  │  │    ↕                    │ │
+│  │  • Run tests         │  │  Wagmi hooks            │ │
+│  │  • Deploy scripts    │  │  (useReadContract, etc.)│ │
+│  │  • Console interact  │  │    ↕                    │ │
+│  │                      │  │  Viem                   │ │
+│  │  Output: ABI + addr ─┼──┼→ (low-level calls,     │ │
+│  │                      │  │   formatting, encoding) │ │
+│  └─────────────────────┘  └────────────────────────┘ │
+│                                     ↕                 │
+│                              RPC Provider             │
+│                         (Alchemy / Infura)            │
+│                                     ↕                 │
+│                              Blockchain               │
+└──────────────────────────────────────────────────────┘
+```
+
+The **bridge** between the two sides is the ABI and contract address you exported in Module 3, Exercise 3.7. The frontend never touches ethers.js; the contracts side never touches Viem.
+
+#### Step 4: Viem -- Deep Dive
+
+Viem has three layers you'll use in this project:
+
+1. **Utility functions** (pure, no side effects)
+   - `formatEther`, `parseEther` -- convert between wei and ether strings
+   - `formatUnits`, `parseUnits` -- convert with arbitrary decimals (for tokens)
+   - `isAddress` -- validate Ethereum addresses
+   - `encodeFunctionData`, `decodeFunctionResult` -- ABI encoding (advanced)
+   - `keccak256`, `toHex`, `fromHex` -- low-level encoding
+
+2. **Clients** (stateful, connect to the blockchain)
+   - `createPublicClient` -- read-only client for querying chain data
+   - `createWalletClient` -- client that can sign and send transactions
+   - Each client needs a **transport** (`http(url)` or `webSocket(url)`) and a **chain** (`sepolia`, `mainnet`, etc.)
+
+3. **Standard ABIs** (pre-built type-safe ABIs)
+   - `erc20Abi` -- complete ERC-20 interface
+   - `erc721Abi` -- complete ERC-721 interface
+   - These give you full type inference: the compiler knows exactly what functions exist and what types they return
+
+> In React components, you typically **don't create Viem clients directly**. Instead, Wagmi creates them for you based on your config (from Module 2, Exercise 2.3). You use Wagmi hooks, and they use the Viem client under the hood. You'll only create Viem clients directly for non-React contexts (utility scripts, background event watchers).
+
+#### Step 5: Wagmi -- Deep Dive
+
+Wagmi provides React hooks that wrap Viem's functionality with:
+
+| Hook | Purpose | Viem equivalent under the hood |
+|------|---------|-------------------------------|
+| `useReadContract` | Read a single contract value | `client.readContract(...)` |
+| `useReadContracts` | Batch-read multiple values in one RPC call | `client.multicall(...)` |
+| `useWriteContract` | Send a transaction that modifies state | `walletClient.writeContract(...)` |
+| `useWaitForTransactionReceipt` | Wait for tx confirmation | `client.waitForTransactionReceipt(...)` |
+| `useWatchContractEvent` | Subscribe to contract events | `client.watchContractEvent(...)` |
+| `useAccount` | Current wallet address & connection state | (wallet connector) |
+| `useBalance` | Native ETH balance | `client.getBalance(...)` |
+| `useChainId` | Connected chain | (config state) |
+| `useEstimateGas` | Estimate gas for a transaction | `client.estimateGas(...)` |
+
+**What Wagmi adds on top of Viem:**
+- **Automatic caching** via TanStack Query -- blockchain reads are cached and deduplicated
+- **React state management** -- `isLoading`, `isError`, `isSuccess` states
+- **Automatic re-renders** -- when data changes, your component re-renders
+- **`enabled` guards** -- conditionally skip queries (e.g., don't read balance if wallet not connected)
+- **Scope keys** -- custom cache keys for targeted invalidation (you'll set this up next)
+
+#### Step 6: When to Use What -- Decision Guide
+
+Use this mental model going forward:
+
+```
+"Am I in a React component?"
+    YES → Use Wagmi hooks
+    NO  → "Am I in the contracts/ package (tests, scripts)?"
+              YES → Use ethers.js (Hardhat provides it)
+              NO  → Use Viem directly (utility scripts, server-side)
+
+"I need to format/parse a value?"
+    → Use Viem utilities (formatEther, parseUnits, etc.)
+      They work everywhere -- React, Node, scripts.
+
+"I need a pre-built ABI?"
+    → Import from Viem (erc20Abi, erc721Abi)
+      OR import the custom ABI you extracted in Module 3.
+```
+
+### Key Takeaways
+
+1. **ethers.js** and **Viem** both talk to the same blockchain -- they're different wrappers around the same JSON-RPC protocol
+2. This project uses ethers.js *only* in Hardhat (contracts), and Viem/Wagmi *only* on the frontend -- this is standard practice
+3. **Viem utilities** (formatting, parsing, validation) are pure functions and work anywhere
+4. **Wagmi hooks** add React state, caching, and re-renders on top of Viem
+5. You already used Viem utilities in Module 2 (Exercise 2.5) and ethers.js in Module 3 (Exercises 3.4-3.6) -- now you understand *why*
+
+### Submission Checklist
+
+- [ ] Can explain why the project uses two different Ethereum libraries
+- [ ] Can describe the three layers of Viem (utilities, clients, ABIs)
+- [ ] Knows which Wagmi hooks map to which blockchain operations
+- [ ] Understands the "Am I in React?" decision guide
+
+---
+
+## Exercise 4.2: Set Up Scopes Pattern for Cache Management
 
 ### Objective
 Create a centralized scopes system for TanStack Query cache invalidation to prevent UI flicker and enable targeted cache updates.
 
 ### Prerequisites
-- [x] Completed Module 3 (contract deployed and ABI shared with frontend)
+- [x] Completed Exercise 4.1
 - [x] TanStack Query configured
 - [x] Wagmi set up
 
@@ -85,13 +233,13 @@ Create a centralized scopes system for TanStack Query cache invalidation to prev
 
 ---
 
-## Exercise 4.2: Read Simple Contract State
+## Exercise 4.3: Read Simple Contract State
 
 ### Objective
 Read data from the SimpleStorage contract you deployed in Module 3 using Wagmi hooks with proper scopes and error handling.
 
 ### Prerequisites
-- [x] Completed Exercise 4.1
+- [x] Completed Exercise 4.2
 - [x] SimpleStorage deployed (from Module 3) and address available
 - [x] Contract ABI shared with frontend (from Module 3, Exercise 3.7)
 
@@ -190,13 +338,13 @@ Read data from the SimpleStorage contract you deployed in Module 3 using Wagmi h
 
 ---
 
-## Exercise 4.3: Read Multiple Contract Values
+## Exercise 4.4: Read Multiple Contract Values
 
 ### Objective
 Read multiple contract values simultaneously using `useReadContracts` for batch reading.
 
 ### Prerequisites
-- [x] Completed Exercise 4.2
+- [x] Completed Exercise 4.3
 - [x] Understanding of single value reading
 
 ### Instructions
@@ -279,13 +427,13 @@ Read multiple contract values simultaneously using `useReadContracts` for batch 
 
 ---
 
-## Exercise 4.4: Read ERC-20 Token Data
+## Exercise 4.5: Read ERC-20 Token Data
 
 ### Objective
 Read ERC-20 token information (name, symbol, decimals, balance) using standard ERC-20 ABI.
 
 ### Prerequisites
-- [x] Completed Exercise 4.3
+- [x] Completed Exercise 4.4
 - [x] Understanding of ERC-20 standard
 
 ### Instructions
@@ -402,13 +550,13 @@ Read ERC-20 token information (name, symbol, decimals, balance) using standard E
 
 ---
 
-## Exercise 4.5: Listen to Contract Events (Basic)
+## Exercise 4.6: Listen to Contract Events (Basic)
 
 ### Objective
 Listen to contract events and update UI in real-time using `useWatchContractEvent`.
 
 ### Prerequisites
-- [x] Completed Exercise 4.4
+- [x] Completed Exercise 4.5
 - [x] Understanding of contract events
 
 ### Instructions
@@ -520,18 +668,22 @@ Listen to contract events and update UI in real-time using `useWatchContractEven
 
 ## Review Questions
 
-1. What is the purpose of scope keys in TanStack Query?
-2. What's the difference between `useReadContract` and `useReadContracts`?
-3. Why do we use `enabled` guards in queries?
-4. How do contract events help keep UI in sync with blockchain state?
-5. Why is it important to format token balances using decimals?
+1. Why does this project use ethers.js in Hardhat and Viem on the frontend? Could you use just one?
+2. Name three things Wagmi adds on top of raw Viem calls.
+3. What is the purpose of scope keys in TanStack Query?
+4. What's the difference between `useReadContract` and `useReadContracts`?
+5. Why do we use `enabled` guards in queries?
+6. How do contract events help keep UI in sync with blockchain state?
+7. Why is it important to format token balances using decimals?
 
 ---
 
 ## Next Steps
 
 After completing this module, you should:
-- Understand how to read contract state
+- Understand the web3 library landscape (ethers.js, Viem, Wagmi)
+- Know when to use which library in which context
+- Understand how to read contract state with Wagmi hooks
 - Know how to use scope keys for cache management
 - Be able to read ERC-20 token data
 - Understand how to listen to contract events

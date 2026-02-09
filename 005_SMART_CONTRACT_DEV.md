@@ -399,6 +399,27 @@ Write comprehensive tests for your SimpleStorage contract using Hardhat's testin
 - [x] Completed Exercise 3.3
 - [x] SimpleStorage contract compiles
 
+> ### A Note on ethers.js vs Viem
+>
+> You're about to write `const { ethers } = require("hardhat")`. That's **ethers.js** -- a *different* Ethereum JavaScript library than the **Viem** you installed on the frontend in Module 2. Why two libraries?
+>
+> | Context | Library | Why |
+> |---------|---------|-----|
+> | **Hardhat** (contracts, tests, deploy scripts) | **ethers.js** | Hardhat's plugin ecosystem (`hardhat-ethers`, `hardhat-upgrades`, etc.) is built around ethers.js. It's the de-facto standard for contract tooling. |
+> | **React frontend** | **Viem + Wagmi** | Viem is TypeScript-first, tree-shakeable, and designed for production frontends. Wagmi wraps it in React hooks with caching and state management. |
+>
+> **The good news:** the concepts are the same, only the syntax differs.
+>
+> | Concept | ethers.js (Hardhat) | Viem (Frontend) |
+> |---------|---------------------|-----------------|
+> | Format wei → ether | `ethers.formatEther(wei)` | `formatEther(wei)` |
+> | Parse ether → wei | `ethers.parseEther("1.0")` | `parseEther("1.0")` |
+> | Get signers / accounts | `ethers.getSigners()` | `useAccount()` (via Wagmi) |
+> | Read contract | `contract.storedValue()` | `useReadContract({ ... })` (via Wagmi) |
+> | Write contract | `contract.setValue(42)` | `useWriteContract()` (via Wagmi) |
+>
+> You don't need to memorise both APIs right now. Just be aware that when you see `ethers` in this module, it's the *Hardhat* library, and when you go back to the frontend in Module 4, you'll switch to Viem/Wagmi. Module 4 covers the full library landscape in depth.
+
 ### Instructions
 
 #### Step 1: Create Test File

@@ -642,96 +642,42 @@ Create a wallet connection component using RainbowKit and display wallet informa
 
 ---
 
-## Exercise 2.5: Understanding Viem and the Wagmi-Viem Relationship
+## Exercise 2.5: First Taste of Viem Utilities
 
 ### Objective
-Understand what Viem is, how it relates to Wagmi, and when to use Viem directly vs Wagmi hooks.
+Get a first practical taste of Viem by creating helper functions you'll use throughout the project. A deeper dive into the web3 library landscape and the full Viem/Wagmi API comes in Module 4, once you have real contracts to work with.
 
 ### Prerequisites
 - [x] Completed Exercise 2.4
-- [x] Basic understanding of Wagmi hooks
+- [x] Wallet connection working
 
 ### Instructions
 
-#### Step 1: Understand the Web3 Library Landscape
+#### Step 1: Understand the Big Picture (Brief)
+You installed three core libraries in Exercise 2.1. Here's how they relate:
 
-**Alternative Web3 Libraries:**
+- **Viem** -- the low-level TypeScript Ethereum library. Handles raw blockchain communication, data encoding, and provides utility functions.
+- **Wagmi** -- a React hooks layer built *on top of* Viem. Every Wagmi hook uses Viem under the hood, but adds React state management, caching, and automatic re-renders.
+- **RainbowKit** -- a UI layer built *on top of* Wagmi. Provides the wallet connection modal and buttons.
 
-Before diving into Viem, it's important to understand that there are several web3 libraries available:
+```
+RainbowKit  (UI components)
+    ↓ uses
+  Wagmi      (React hooks + caching)
+    ↓ uses
+  Viem       (low-level Ethereum library)
+    ↓ talks to
+  Blockchain (via RPC provider)
+```
 
-1. **ethers.js** (v5/v6)
-   - One of the most popular Ethereum libraries
-   - Mature, well-documented, large ecosystem
-   - Heavier bundle size
-   - Less TypeScript-first (though v6 improved this)
-   - More opinionated API design
+> You'll also encounter **ethers.js** in Module 3 when you set up Hardhat for smart contract development. Hardhat's tooling is built on ethers.js, while the frontend uses Viem/Wagmi. Module 4 explains this split in detail and covers the full Viem/Wagmi API. For now, just know the names.
 
-2. **web3.js**
-   - Original Ethereum JavaScript library
-   - Very mature, widely used
-   - Larger bundle size
-   - More verbose API
-   - Less modern TypeScript support
+#### Step 2: Create Viem Helper Functions
+Viem provides pure utility functions that work anywhere -- React components, scripts, tests, or plain TypeScript files. Create a helpers file you'll reuse throughout the project.
 
-3. **Viem** (what we use)
-   - Modern, TypeScript-first library
-   - Lightweight and tree-shakeable (smaller bundle sizes)
-   - Excellent TypeScript inference and type safety
-   - Modular architecture (import only what you need)
-   - Built with modern JavaScript/TypeScript best practices
-   - Active development and community
-
-**Why Viem Was Chosen:**
-
-1. **TypeScript-First Design**
-   - Excellent type inference and autocomplete
-   - Type-safe contract interactions
-   - Better developer experience
-
-2. **Performance & Bundle Size**
-   - Tree-shakeable (only import what you use)
-   - Smaller bundle sizes = faster app loads
-   - Better for production DApps
-
-3. **Modern Architecture**
-   - Modular design
-   - Clean, consistent API
-   - Built for modern JavaScript/TypeScript
-
-4. **Wagmi Compatibility**
-   - Wagmi 2.x is built on Viem
-   - Seamless integration
-   - Unified ecosystem
-
-5. **Active Development**
-   - Modern, actively maintained
-   - Regular updates and improvements
-   - Strong community support
-
-> **📖 Note**: While ethers.js and web3.js are still excellent libraries, Viem represents the modern approach to Ethereum development. For new projects, Viem offers better TypeScript support, smaller bundles, and a more developer-friendly API.
-
-#### Step 2: Understand the Wagmi-Viem Relationship
-**Key Concept**: Wagmi is built on top of Viem. Think of it this way:
-- **Viem** = Low-level TypeScript Ethereum library (the foundation)
-- **Wagmi** = React hooks wrapper around Viem (React-specific convenience layer)
-
-**When to use each:**
-- **Use Wagmi hooks** (`useReadContract`, `useWriteContract`, etc.) for React components - they handle state, caching, and re-renders automatically
-- **Use Viem directly** for:
-  - Utility functions (`formatUnits`, `parseUnits`, `isAddress`, etc.)
-  - Non-React contexts (scripts, utilities, background tasks)
-  - Advanced use cases where you need more control
-  - Creating custom clients (like the WebSocket client for events)
-
-#### Step 3: Explore Viem Utilities
 1. Create `apps/frontend/src/utils/viemHelpers.ts`:
    ```typescript
    import { formatUnits, parseUnits, isAddress, formatEther, parseEther } from 'viem';
-
-   /**
-    * Viem Utility Functions
-    * These are pure functions from Viem that don't require React hooks
-    */
 
    // Format wei to ether (human-readable)
    export function formatWeiToEther(wei: bigint): string {
@@ -765,16 +711,8 @@ Before diving into Viem, it's important to understand that there are several web
    }
    ```
 
-**Expected Outcome:**
-- Utility functions file created
-- Understanding of Viem's pure utility functions
-
-**Checkpoint:**
-- [ ] Utility functions file created
-- [ ] Functions use Viem utilities directly (not Wagmi hooks)
-
-#### Step 4: Use Viem Utilities in Components
-1. Update `apps/frontend/src/components/WalletInfo.tsx` to use Viem utilities:
+#### Step 3: Use Helpers in WalletInfo
+1. Update `apps/frontend/src/components/WalletInfo.tsx` to use the formatter:
    ```typescript
    import { useAccount, useBalance, useChainId } from 'wagmi';
    import { formatAddress } from '@/utils/viemHelpers';
@@ -782,9 +720,7 @@ Before diving into Viem, it's important to understand that there are several web
    export function WalletInfo() {
      const { address, isConnected } = useAccount();
      const chainId = useChainId();
-     const { data: balance, isLoading: balanceLoading } = useBalance({ 
-       address 
-     });
+     const { data: balance, isLoading: balanceLoading } = useBalance({ address });
 
      if (!isConnected) {
        return (
@@ -798,14 +734,12 @@ Before diving into Viem, it's important to understand that there are several web
        <div className="p-4 border rounded-lg space-y-2">
          <h3 className="font-bold">Wallet Information</h3>
          <p><strong>Address:</strong> {formatAddress(address!)}</p>
-         <p><strong>Full Address:</strong> {address}</p>
+         <p><strong>Full Address:</strong> <span className="text-xs">{address}</span></p>
          <p><strong>Chain ID:</strong> {chainId}</p>
          {balanceLoading ? (
            <p>Loading balance...</p>
          ) : (
-           <p>
-             <strong>Balance:</strong> {balance?.formatted} {balance?.symbol}
-           </p>
+           <p><strong>Balance:</strong> {balance?.formatted} {balance?.symbol}</p>
          )}
        </div>
      );
@@ -813,172 +747,30 @@ Before diving into Viem, it's important to understand that there are several web
    ```
 
 **Expected Outcome:**
-- Component uses Viem utilities for formatting
-- Demonstrates mixing Wagmi hooks with Viem utilities
+- Viem helper functions ready for reuse
+- WalletInfo displays shortened address using Viem
 
 **Checkpoint:**
-- [ ] Component uses `formatAddress` from Viem helpers
-- [ ] Shows both shortened and full address
-
-#### Step 5: Understand When Wagmi Uses Viem
-1. Create `apps/frontend/src/components/ViemWagmiDemo.tsx`:
-   ```typescript
-   import { useReadContract } from 'wagmi';
-   import { formatUnits } from 'viem';
-   import { erc20Abi } from 'viem';
-
-   /**
-    * This component demonstrates:
-    * 1. Wagmi hook (useReadContract) - handles React state and caching
-    * 2. Viem utility (formatUnits) - pure formatting function
-    * 3. Viem ABI (erc20Abi) - standard ABI definitions
-    */
-   export function ViemWagmiDemo({ tokenAddress }: { tokenAddress: `0x${string}` }) {
-     // Wagmi hook - handles state, loading, errors, caching
-     const { data: decimals } = useReadContract({
-       address: tokenAddress,
-       abi: erc20Abi, // Viem provides standard ABIs
-       functionName: 'decimals',
-     });
-
-     // Viem utility - pure function, no React needed
-     const formattedDecimals = decimals !== undefined 
-       ? formatUnits(decimals as bigint, 0) 
-       : '...';
-
-     return (
-       <div className="p-4 border rounded-lg">
-         <h3 className="font-bold">Viem + Wagmi Demo</h3>
-         <p><strong>Token Decimals:</strong> {formattedDecimals}</p>
-         <p className="text-sm text-gray-600 mt-2">
-           This uses Wagmi hook for blockchain read + Viem utility for formatting
-         </p>
-       </div>
-     );
-   }
-   ```
-
-**Expected Outcome:**
-- Component demonstrates Wagmi + Viem working together
-- Shows practical example of when to use each
-
-**Checkpoint:**
-- [ ] Component uses Wagmi hook for blockchain interaction
-- [ ] Component uses Viem utility for formatting
-- [ ] Component uses Viem ABI
-
-#### Step 6: Create a Viem Client Directly (Advanced)
-1. Create `apps/frontend/src/utils/viemClient.ts`:
-   ```typescript
-   import { createPublicClient, http, webSocket } from 'viem';
-   import { sepolia } from 'viem/chains';
-   import { ALCHEMY_HTTP_SEPOLIA, ALCHEMY_WS_SEPOLIA } from '@/config/providers';
-
-   /**
-    * Direct Viem Client
-    * Use this when you need blockchain access outside React components
-    * (e.g., in utilities, scripts, or background tasks)
-    * 
-    * Note: In React components, prefer Wagmi hooks for automatic state management
-    */
-   export const viemPublicClient = createPublicClient({
-     chain: sepolia,
-     transport: http(ALCHEMY_HTTP_SEPOLIA),
-   });
-
-   /**
-    * WebSocket-only client for event watching
-    * This is used in the real-time event system (Module 5)
-    */
-   export const viemWsClient = createPublicClient({
-     chain: sepolia,
-     transport: webSocket(ALCHEMY_WS_SEPOLIA),
-   });
-
-   /**
-    * Example: Using Viem client directly (non-React context)
-    */
-   export async function getBlockNumberDirectly(): Promise<bigint> {
-     // This doesn't use React hooks - pure Viem
-     return await viemPublicClient.getBlockNumber();
-   }
-   ```
-
-**Expected Outcome:**
-- Direct Viem client created
-- Understanding of when to use direct Viem clients
-
-**Checkpoint:**
-- [ ] Viem client file created
-- [ ] Client configured with proper transport
-- [ ] Example function shows direct usage
-
-### Key Takeaways
-
-1. **Web3 Library Landscape**
-   - **ethers.js** and **web3.js** are popular alternatives
-   - **Viem** was chosen for:
-     - TypeScript-first design (better type safety and DX)
-     - Smaller bundle sizes (tree-shakeable)
-     - Modern architecture and API
-     - Excellent Wagmi integration
-     - Active development and community
-
-2. **Wagmi = React hooks wrapper around Viem**
-   - Wagmi hooks handle React state, re-renders, and caching automatically
-   - Use Wagmi hooks in React components
-   - Built on top of Viem (Viem is the foundation)
-
-3. **Viem = Low-level Ethereum library**
-   - Provides pure utility functions (`formatUnits`, `parseUnits`, etc.)
-   - Provides standard ABIs (`erc20Abi`, `erc721Abi`, etc.)
-   - Can create clients directly for non-React contexts
-   - Used by Wagmi under the hood
-   - Chosen for modern TypeScript-first approach
-
-4. **When to use each:**
-   - **Wagmi hooks**: React components, UI interactions
-   - **Viem utilities**: Formatting, validation, pure functions
-   - **Viem clients**: Scripts, utilities, background tasks, event watching
-
-5. **They work together:**
-   - Wagmi hooks use Viem internally
-   - You can use Viem utilities alongside Wagmi hooks
-   - Viem provides the foundation, Wagmi provides React convenience
-
-### Common Issues & Solutions
-
-**Issue:** When should I use Viem directly vs Wagmi?
-- **Solution**: 
-  - Use Wagmi hooks in React components (they handle state automatically)
-  - Use Viem utilities for formatting/validation (pure functions)
-  - Use Viem clients for non-React contexts (scripts, utilities)
-
-**Issue:** Can I use Viem without Wagmi?
-- **Solution**: Yes! Viem is independent. Wagmi just provides React hooks on top of Viem.
+- [ ] `src/utils/viemHelpers.ts` created
+- [ ] WalletInfo uses `formatAddress`
+- [ ] Understands that Viem utilities are pure functions, not React hooks
 
 ### Submission Checklist
 
-- [ ] Viem utility functions file created
-- [ ] Component uses Viem utilities for formatting
-- [ ] Demo component shows Wagmi + Viem working together
-- [ ] Direct Viem client created (for reference)
-- [ ] Understand the relationship between Wagmi and Viem
-- [ ] Know when to use each
+- [ ] Viem helper functions file created
+- [ ] `formatAddress` used in WalletInfo component
+- [ ] Understands the Viem → Wagmi → RainbowKit stack
 
 ---
 
 ## Review Questions
 
-1. What is the difference between Wagmi and Viem?
-2. Why was Viem chosen over alternatives like ethers.js or web3.js?
-3. What are the main advantages of Viem?
-4. When should you use Viem directly instead of Wagmi hooks?
-5. Why do we use WebSocket transport on desktop but HTTP on mobile?
-6. What is the purpose of TanStack Query in a DApp?
-7. Why do we need Node.js polyfills (buffer, process, util) in the browser?
-8. What is the correct order for wrapping providers in React?
-9. What Viem utilities are commonly used in DApp development?
+1. What is the relationship between Viem, Wagmi, and RainbowKit?
+2. Why do we use WebSocket transport on desktop but HTTP on mobile?
+3. What is the purpose of TanStack Query in a DApp?
+4. Why do we need Node.js polyfills (buffer, process, util) in the browser?
+5. What is the correct order for wrapping providers in React?
+6. Name two Viem utility functions and explain what they do.
 
 ---
 
@@ -990,6 +782,5 @@ After completing this module, you should:
 - Be able to connect and disconnect wallets
 - Display wallet information (address, balance, chain)
 - Understand provider configuration and transport selection
-- Understand the relationship between Wagmi and Viem
-- Know when to use Viem utilities vs Wagmi hooks
+- Have a first practical taste of Viem utility functions
 - Proceed to Module 3: Smart Contract Development & Deployment

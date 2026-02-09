@@ -125,9 +125,8 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Understand blockchain basics (Ethereum, accounts, transactions)
 - Learn about wallets (MetaMask, WalletConnect)
 - Integrate RainbowKit for wallet connection UI
-- Configure WAGMI for wallet interactions
-- Understand Viem and its relationship with Wagmi
-- Know when to use Viem utilities vs Wagmi hooks
+- Configure Wagmi for wallet interactions
+- Get a first taste of Viem utility functions
 - Handle wallet connection states
 
 ### Prerequisites
@@ -197,19 +196,16 @@ This learning path is structured in **9 progressive modules**, each building upo
 2. Use Wagmi hooks for wallet state (`useAccount`, `useBalance`, `useChainId`)
 3. Handle chain switching and connection states
 
-#### Exercise 2.5: Understanding Viem and the Wagmi-Viem Relationship
-1. Learn about alternative web3 libraries (ethers.js, web3.js) and why Viem was chosen
-2. Understand that Wagmi is built on top of Viem
-3. Learn Viem utility functions (`formatUnits`, `parseUnits`, `isAddress`, etc.)
-4. Create utility functions using Viem directly
-5. Understand when to use Viem vs Wagmi hooks
+#### Exercise 2.5: First Taste of Viem Utilities
+1. Understand the big picture: Viem → Wagmi → RainbowKit stack
+2. Create Viem helper functions (`formatAddress`, `formatWeiToEther`, etc.)
+3. Use helpers in WalletInfo component
 
-> **Key Concept**: Wagmi provides React hooks for Ethereum, but it's built on Viem. Use Wagmi hooks in React components, but use Viem utilities for formatting, validation, and non-React contexts.
+> **Note**: A deep dive into the full web3 library landscape (ethers.js vs Viem vs web3.js, when to use what) comes in Module 4, once you have real contracts and Hardhat experience to give it context.
 
 ### Key Concepts
-- **Viem**: Low-level TypeScript Ethereum library (foundation)
-- **Wagmi**: React hooks wrapper around Viem (React convenience layer)
-- **When to use each**: Wagmi hooks for React components, Viem utilities for pure functions
+- **Viem → Wagmi → RainbowKit**: Three layers from low-level to UI
+- **Viem utilities**: Pure functions for formatting/validation that work anywhere
 - **EVM Chains**: Understanding different networks (Mainnet, Testnets, Local)
 - **RPC Providers**: Alchemy with WebSocket (desktop) / HTTP (mobile) transport selection
 - **Wallet Providers**: How wallets interact with DApps via WalletConnect
@@ -220,8 +216,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - Can connect and disconnect wallets
 - Understands wallet connection flow
 - Can display wallet information (address, balance, network)
-- Understands the relationship between Wagmi and Viem
-- Knows when to use Viem utilities vs Wagmi hooks
+- Has created and used Viem utility functions
 
 ---
 
@@ -317,41 +312,53 @@ This learning path is structured in **9 progressive modules**, each building upo
 **Difficulty:** Intermediate
 
 ### Learning Objectives
-- Understand how to read data from smart contracts
-- Use WAGMI hooks to query blockchain state
+- Understand the full web3 library landscape (ethers.js, Viem, web3.js)
+- Know why this project uses ethers.js in Hardhat and Viem/Wagmi on the frontend
+- Understand how to read data from smart contracts using Wagmi hooks
 - Handle loading and error states
 - Work with different data types (strings, numbers, arrays, structs)
 - Understand the difference between read and write operations
 
 ### Prerequisites
-- Completed Module 3 (contract deployed, ABI shared with frontend)
+- Completed Module 3 (contract deployed, ABI shared with frontend, used ethers.js in tests)
 
 ### Exercises
 
-#### Exercise 4.1: Set Up Scopes Pattern for Cache Management
+#### Exercise 4.1: Understanding the Web3 Library Landscape
+1. Learn the three major Ethereum JS libraries (web3.js, ethers.js, Viem) and when each is used
+2. Understand why this project uses ethers.js in Hardhat and Viem/Wagmi on the frontend
+3. Deep dive into Viem's three layers (utilities, clients, ABIs)
+4. Deep dive into Wagmi hooks and what they add on top of Viem
+5. Learn the "Am I in React?" decision guide for choosing the right library
+
+#### Exercise 4.2: Set Up Scopes Pattern for Cache Management
 1. Create centralized scopes for TanStack Query cache invalidation
 2. Create helper functions for targeted invalidation
 
-#### Exercise 4.2: Read Simple Contract State
+#### Exercise 4.3: Read Simple Contract State
 1. Use `useReadContract` with contract info from Module 3
 2. Handle loading and error states properly
 3. Use scope keys for cache management
 
-#### Exercise 4.3: Read Multiple Values
+#### Exercise 4.4: Read Multiple Values
 1. Use `useReadContracts` for batch reading
 2. Use TanStack Query's `placeholderData` to prevent flicker on refetch
 
-#### Exercise 4.4: Read ERC-20 Token Data
+#### Exercise 4.5: Read ERC-20 Token Data
 1. Read token name, symbol, decimals, total supply
 2. Read user's token balance
 3. Display formatted token amounts (considering decimals)
 
-#### Exercise 4.5: Event Listening (Basic)
+#### Exercise 4.6: Event Listening (Basic)
 1. Use `useWatchContractEvent` for basic event watching
 2. Invalidate relevant queries on events
 3. Display event logs in real-time
 
 ### Key Concepts
+- **Web3 library landscape**: ethers.js (Hardhat), Viem (frontend low-level), Wagmi (React hooks)
+- **Why two libraries**: contract tooling needs vs frontend needs
+- **Viem layers**: utilities, clients, standard ABIs
+- **Wagmi additions**: caching, React state, re-renders, `enabled` guards, scope keys
 - **ABI (Application Binary Interface)**: How to interact with contracts
 - **Read Operations**: Free, no gas cost, synchronous
 - **TanStack Query 5**: Query scopes pattern for targeted cache invalidation
@@ -359,6 +366,8 @@ This learning path is structured in **9 progressive modules**, each building upo
 - **Wagmi 2 Hooks**: `useReadContract`, `useReadContracts`, `useWatchContractEvent`
 
 ### Checkpoint
+- Can explain why the project uses two Ethereum libraries
+- Knows when to use ethers.js, Viem, and Wagmi
 - Can read any public contract variable
 - Understands loading and error handling
 - Can work with different data types
