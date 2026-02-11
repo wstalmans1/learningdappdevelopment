@@ -17,7 +17,7 @@ This learning path is structured in **9 progressive modules**, each building upo
 - **Key concepts to master**
 - **Checkpoint assessment**
 
-> **Architecture note:** Every DApp you build in this curriculum is **client-side only**. There is no backend server, no SSR, no server-side API. The React frontend runs entirely in the browser, talks to the blockchain via an RPC provider (Alchemy), and uses the user's wallet for authentication. The build output is a static folder you deploy to any static host. See `001_README.md` for the full architecture diagram.
+> **Architecture note:** Every DApp you build in this curriculum is **client-side only**. There is no backend server, no SSR, no server-side API. The React frontend runs entirely in the browser, talks to the blockchain via an RPC provider (Alchemy), and uses the user's wallet for authentication. The build output is a static folder you deploy to any static host. See `001_INTRO.md` for the full architecture diagram.
 
 ---
 

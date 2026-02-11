@@ -311,7 +311,7 @@
 
 <aside id="sidebar">
   <div class="section-label">Getting Started</div>
-  <a href="#001_README.md" data-file="001_README.md">Overview &amp; README</a>
+  <a href="#001_INTRO.md" data-file="001_INTRO.md">Introduction</a>
   <a href="#002_DAPP_LEARNING_PATH.md" data-file="002_DAPP_LEARNING_PATH.md">Learning Path</a>
 
   <div class="section-label">Modules</div>
@@ -424,7 +424,7 @@
 
   // ── Hash routing ──
   function onHashChange() {
-    const file = window.location.hash.slice(1) || '001_README.md';
+    const file = window.location.hash.slice(1) || '001_INTRO.md';
     loadFile(file);
   }
   window.addEventListener('hashchange', onHashChange);

@@ -118,7 +118,7 @@ This repository is organized with numbered files for easy navigation. Here's how
 
 ```
 learningdappdevelopment/
-├── 001_README.md                       # Start here! Main entry point and overview
+├── 001_INTRO.md                        # Start here! Main entry point and overview
 ├── 002_DAPP_LEARNING_PATH.md           # Complete curriculum overview with all 9 modules
 │
 ├── 003_ENVIRONMENT_SETUP.md            # Environment Setup & Project Scaffolding
@@ -152,7 +152,7 @@ dapp_setup_guides/
 
 ### How to Use These Files
 
-1. **Start with `001_README.md`** - Read the overview and prerequisites
+1. **Start with `001_INTRO.md`** - Read the overview and prerequisites
 2. **Read `002_DAPP_LEARNING_PATH.md`** - Understand the full curriculum
 3. **Follow exercises sequentially** - Start with `003_ENVIRONMENT_SETUP.md`, then `004_WEB3_WALLET_INTEGRATION.md`, etc.
 4. **Keep `012_QUICK_REFERENCE.md` open** - Use it as a cheat sheet while working
